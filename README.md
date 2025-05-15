@@ -13,7 +13,7 @@ This document provides an overview of the Data Flow Diagrams (DFDs) created for 
 
 For easier viewing, an HTML version of these diagrams is available:
 
-### [➡️ View Interactive HTML Diagrams Online](https://htmlpreview.github.io/?https://github.com/davidkhalifa/DPIA-DFD/blob/master/HTML_Pages/index.html)
+### [➡️ View Interactive HTML Diagrams Online](https://davidkhalifa.github.io/DPIA-DFD/HTML_Pages/index.html)
 
 You can also view locally by opening the `HTML_Pages/index.html` file in your browser to access:
 
