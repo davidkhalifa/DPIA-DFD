@@ -40,27 +40,25 @@ flowchart LR
         FinanceDataLake
         GeneralLedger
     end
-    
-    %% Data flows
-    Customer -->|"1. Profile info (name, email, address)\n[via TLS/SSL]"| CommerceSignup
-    CommerceSignup -->|"2. Create customer account\nwith profile data"| CustomerDB
-    Customer -->|"3. Payment details (CC#, exp date)\n[via TLS/SSL]"| BillingService
-    BillingService -->|"4. Tokenized payment data\n[encrypted]"| PaymentProcessor
+      %% Data flows
+    Customer -->|"1. Profile info (name, email, address) [via TLS/SSL]"| CommerceSignup
+    CommerceSignup -->|"2. Create customer account with profile data"| CustomerDB
+    Customer -->|"3. Payment details (CC#, exp date) [via TLS/SSL]"| BillingService
+    BillingService -->|"4. Tokenized payment data [encrypted]"| PaymentProcessor
     PaymentProcessor -->|"5. Payment confirmation"| BillingService
-    BillingService -->|"6. Transaction data\n(amount, customer ID)"| BillingDB
-    BillingService -->|"7. Tax calculation data\n(country, transaction type)"| TaxService
-    TaxService -->|"8. Tax obligation data\n(as required by law)"| TaxAuthority
-    BillingService -->|"9. Payment instruction\n(tokenized data)"| Bank
-    BillingService -->|"10. Invoice data\n(name, address, purchase)"| EmailService
-    EmailService -->|"11. Billing email\n(invoice)"| Customer
-    BillingDB -->|"12. Financial records\n(pseudonymized)"| FinanceDataLake
-    FinanceDataLake -->|"13. Financial aggregates\n(anonymized)"| GeneralLedger
-    FinanceDataLake -->|"14. Usage patterns\n(pseudonymized)"| AnalyticsService
-    
-    %% Additional notes about data regions and retention
-    BillingDB -.->|"EU Datacenter (Primary)\nUS Datacenter (Copy)"| BillingDB
-    FinanceDataLake -.->|"Data retention: 7 years\nfor tax/legal purposes"| FinanceDataLake
-    CustomerDB -.->|"Deleted upon request\n(except as legally required)"| CustomerDB
+    BillingService -->|"6. Transaction data (amount, customer ID)"| BillingDB
+    BillingService -->|"7. Tax calculation data (country, transaction type)"| TaxService
+    TaxService -->|"8. Tax obligation data (as required by law)"| TaxAuthority
+    BillingService -->|"9. Payment instruction (tokenized data)"| Bank
+    BillingService -->|"10. Invoice data (name, address, purchase)"| EmailService
+    EmailService -->|"11. Billing email (invoice)"| Customer
+    BillingDB -->|"12. Financial records (pseudonymized)"| FinanceDataLake
+    FinanceDataLake -->|"13. Financial aggregates (anonymized)"| GeneralLedger
+    FinanceDataLake -->|"14. Usage patterns (pseudonymized)"| AnalyticsService
+      %% Additional notes about data regions and retention
+    BillingDB -.->|"EU Datacenter (Primary), US Datacenter (Copy)"| BillingDB
+    FinanceDataLake -.->|"Data retention: 7 years for tax/legal purposes"| FinanceDataLake
+    CustomerDB -.->|"Deleted upon request (except as legally required)"| CustomerDB
 ```
 
 ## Legend
