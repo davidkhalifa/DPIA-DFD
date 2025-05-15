@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commerce Financial Platforms (CFP) - High Level Data Flow Overview</title>
+    <!-- Mermaid library -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'neutral',
+                fontFamily: 'Segoe UI'
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #0078d4;
+        }
+        h1 {
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 16px;
+            overflow: auto;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+        }
+        .mermaid {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        p {
+            margin-bottom: 16px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0078d4;
+            padding-left: 16px;
+            margin-left: 0;
+            color: #666;
+        }
+        a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .menu {
+            margin-bottom: 30px;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .menu a {
+            margin-right: 15px;
+            padding: 5px 10px;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+        .menu a:hover {
+            background-color: #e0e0e0;
+            text-decoration: none;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <a href="high_level_overview.html">High Level Overview</a>
+            <a href="data_retention_deletion.html">Data Retention & Deletion</a>
+            <a href="external_data_sharing.html">External Data Sharing</a>
+            <a href="transaction_processing_detail.html">Transaction Processing</a>
+            <a href="index.html">Home</a>
+        </div>
+<h1>Commerce Financial Platforms (CFP) - High Level Data Flow Overview</h1>
+
+<p>This diagram provides a high-level overview of personal data flows through Microsoft's Commerce Financial Platforms (CFP) system, from collection to deletion.</p>
+
+<div class='mermaid'>flowchart LR
+    %% Define styles
+    classDef external fill:#f9f,stroke:#333,stroke-width:2px
+    classDef process fill:#bbf,stroke:#333,stroke-width:1px
+    classDef datastore fill:#dfd,stroke:#333,stroke-width:1px,shape:cylinder
+    classDef sensitiveData fill:#fcb,stroke:#f66,stroke-width:2px
+    classDef encrypted fill:#cfc,stroke:#393,stroke-width:1px
+    
+    %% External entities
+    Customer(["Customer (Jane Doe)"]):::external
+    PaymentProcessor(["Payment Processor"]):::external
+    TaxAuthority(["Tax Authority"]):::external
+    Bank(["Bank"]):::external
+    EmailService(["Email Delivery Service"]):::external
+
+    %% Internal processes
+    CommerceSignup["Commerce Signup Service"]:::process
+    BillingService["Billing Service"]:::process
+    TaxService["Tax Service"]:::process
+    AnalyticsService["Analytics Service"]:::process
+    
+    %% Data stores
+    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs (identifiable)")]:::datastore
+    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n- Billing addresses")]:::datastore
+    FinanceDataLake[("Finance Data Lake\n- Transaction records (with customer IDs)\n- Usage data (pseudonymized)")]:::datastore
+    GeneralLedger[("General Ledger System\n- Aggregated financial data\n- Limited personal data")]:::datastore
+    
+    subgraph MicrosoftBoundary["Microsoft Internal Systems"]
+        CommerceSignup
+        BillingService
+        TaxService
+        AnalyticsService
+        CustomerDB
+        BillingDB
+        FinanceDataLake
+        GeneralLedger
+    end
+    
+    %% Data flows
+    Customer -->|"1. Profile info (name, email, address)\n[via TLS/SSL]"| CommerceSignup
+    CommerceSignup -->|"2. Create customer account\nwith profile data"| CustomerDB
+    Customer -->|"3. Payment details (CC#, exp date)\n[via TLS/SSL]"| BillingService
+    BillingService -->|"4. Tokenized payment data\n[encrypted]"| PaymentProcessor
+    PaymentProcessor -->|"5. Payment confirmation"| BillingService
+    BillingService -->|"6. Transaction data\n(amount, customer ID)"| BillingDB
+    BillingService -->|"7. Tax calculation data\n(country, transaction type)"| TaxService
+    TaxService -->|"8. Tax obligation data\n(as required by law)"| TaxAuthority
+    BillingService -->|"9. Payment instruction\n(tokenized data)"| Bank
+    BillingService -->|"10. Invoice data\n(name, address, purchase)"| EmailService
+    EmailService -->|"11. Billing email\n(invoice)"| Customer
+    BillingDB -->|"12. Financial records\n(pseudonymized)"| FinanceDataLake
+    FinanceDataLake -->|"13. Financial aggregates\n(anonymized)"| GeneralLedger
+    FinanceDataLake -->|"14. Usage patterns\n(pseudonymized)"| AnalyticsService
+    
+    %% Additional notes about data regions and retention
+    BillingDB -.->|"EU Datacenter (Primary)\nUS Datacenter (Copy)"| BillingDB
+    FinanceDataLake -.->|"Data retention: 7 years\nfor tax/legal purposes"| FinanceDataLake
+    CustomerDB -.->|"Deleted upon request\n(except as legally required)"| CustomerDB</div>
+
+<p>#<h1>Legend</h1></p>
+
+<p>This data flow diagram illustrates:</p>
+
+<p>1. <strong>Data Stores</strong>: Represented as cylinders showing what personal data is stored in each system
+2. <strong>Data Flows</strong>: Shown as arrows with labels indicating what personal data moves between components
+3. <strong>External Entities</strong>: Shown as rounded rectangles outside Microsoft's boundary
+4. <strong>Trust Boundary</strong>: Microsoft's internal systems are enclosed in a subgraph
+5. <strong>Flow Sequence</strong>: Numbered from 1-14 showing the progression of data from collection to analytics
+6. <strong>Data Protection Notes</strong>: Includes encryption indicators and regional storage information</p>
+
+<p>#<h1>Key Data Protection Points:</h1></p>
+
+<ul><li>Personal payment data is tokenized before leaving Microsoft systems</li>
+<li>All external data transfers use TLS/SSL encryption</li>
+<li>Personal data is pseudonymized when used for analytics</li>
+<li>Regional data storage complies with data sovereignty requirements</li>
+<li>Retention periods are defined based on legal requirements</li>
+</ul>
+    </div>
+</body>
+</html>
