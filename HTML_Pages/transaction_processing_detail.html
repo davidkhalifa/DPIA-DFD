@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - Detailed Transaction Processing</title>
+    <title>Commerce Financial Platforms (CFP) - Detailed Transaction Processing
+</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -105,13 +106,15 @@
 <body>
     <div class="container">
         <div class="menu">
+            <a href="index.html">Home</a>
             <a href="high_level_overview.html">High Level Overview</a>
             <a href="data_retention_deletion.html">Data Retention & Deletion</a>
             <a href="external_data_sharing.html">External Data Sharing</a>
             <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="index.html">Home</a>
+            <a href="user_journey_perspective.html">User Journey </a>
         </div>
-<h1>Commerce Financial Platforms (CFP) - Detailed Transaction Processing</h1>
+<h1>Commerce Financial Platforms (CFP) - Detailed Transaction Processing
+</h1>
 
 <p>This diagram provides a detailed view of the transaction processing flow in Microsoft's Commerce Financial Platforms (CFP), focusing on how customer payment data is handled.</p>
 
@@ -187,7 +190,8 @@
     PaymentTokenStore -.->|"Tokens stored with\nenhanced security controls"| PaymentTokenStore
     BillingDB -.->|"Contains customer ID\nbut no raw payment data"| BillingDB</div>
 
-<p>#<h1>Legend</h1></p>
+<p>#<h1>Legend
+</h1></p>
 
 <p>This detailed transaction flow diagram illustrates:</p>
 
@@ -197,13 +201,19 @@
 4. <strong>Data Minimization</strong>: Each system only accesses the personal data it needs
 5. <strong>Encryption</strong>: All external transfers are encrypted using TLS/SSL</p>
 
-<p>#<h1>Key Data Protection Elements:</h1></p>
+<p>#<h1>Key Data Protection Elements:
+</h1></p>
 
-<ul><li>CVV data is never stored and is used only for initial authorization</li>
-<li>Full credit card numbers are replaced with tokens for recurring billing</li>
-<li>Special security controls are applied to systems handling payment data</li>
-<li>Customer data and payment data are stored in separate systems</li>
-<li>Encryption is applied to all data in transit</li>
+<ul><li>CVV data is never stored and is used only for initial authorization
+</li>
+<li>Full credit card numbers are replaced with tokens for recurring billing
+</li>
+<li>Special security controls are applied to systems handling payment data
+</li>
+<li>Customer data and payment data are stored in separate systems
+</li>
+<li>Encryption is applied to all data in transit
+</li>
 </ul>
     </div>
 </body>

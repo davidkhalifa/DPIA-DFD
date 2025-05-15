@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - High Level Data Flow Overview</title>
+    <title>Commerce Financial Platforms (CFP) - High Level Data Flow Overview
+</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -105,13 +106,15 @@
 <body>
     <div class="container">
         <div class="menu">
+            <a href="index.html">Home</a>
             <a href="high_level_overview.html">High Level Overview</a>
             <a href="data_retention_deletion.html">Data Retention & Deletion</a>
             <a href="external_data_sharing.html">External Data Sharing</a>
             <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="index.html">Home</a>
+            <a href="user_journey_perspective.html">User Journey </a>
         </div>
-<h1>Commerce Financial Platforms (CFP) - High Level Data Flow Overview</h1>
+<h1>Commerce Financial Platforms (CFP) - High Level Data Flow Overview
+</h1>
 
 <p>This diagram provides a high-level overview of personal data flows through Microsoft's Commerce Financial Platforms (CFP) system, from collection to deletion.</p>
 
@@ -174,7 +177,8 @@
     FinanceDataLake -.->|"Data retention: 7 years\nfor tax/legal purposes"| FinanceDataLake
     CustomerDB -.->|"Deleted upon request\n(except as legally required)"| CustomerDB</div>
 
-<p>#<h1>Legend</h1></p>
+<p>#<h1>Legend
+</h1></p>
 
 <p>This data flow diagram illustrates:</p>
 
@@ -185,13 +189,19 @@
 5. <strong>Flow Sequence</strong>: Numbered from 1-14 showing the progression of data from collection to analytics
 6. <strong>Data Protection Notes</strong>: Includes encryption indicators and regional storage information</p>
 
-<p>#<h1>Key Data Protection Points:</h1></p>
+<p>#<h1>Key Data Protection Points:
+</h1></p>
 
-<ul><li>Personal payment data is tokenized before leaving Microsoft systems</li>
-<li>All external data transfers use TLS/SSL encryption</li>
-<li>Personal data is pseudonymized when used for analytics</li>
-<li>Regional data storage complies with data sovereignty requirements</li>
-<li>Retention periods are defined based on legal requirements</li>
+<ul><li>Personal payment data is tokenized before leaving Microsoft systems
+</li>
+<li>All external data transfers use TLS/SSL encryption
+</li>
+<li>Personal data is pseudonymized when used for analytics
+</li>
+<li>Regional data storage complies with data sovereignty requirements
+</li>
+<li>Retention periods are defined based on legal requirements
+</li>
 </ul>
     </div>
 </body>
