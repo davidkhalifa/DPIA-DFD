@@ -10,25 +10,25 @@ flowchart LR
     classDef datastore fill:#dfd,stroke:#333,stroke-width:1px,shape:cylinder
     classDef sensitiveData fill:#fcb,stroke:#f66,stroke-width:2px
     classDef encrypted fill:#cfc,stroke:#393,stroke-width:1px
-      %% External entities
+    %% External entities
     Customer(["Customer (Jane Doe)"]):::external
     PaymentProcessor(["Payment Processor"]):::external
     TaxAuthority(["Tax Authority"]):::external
     Bank(["Bank"]):::external
     EmailService(["Email Delivery Service"]):::external
-    
+
     %% Internal processes
     CommerceSignup["Commerce Signup Service"]:::process
     BillingService["Billing Service"]:::process
     TaxService["Tax Service"]:::process
     AnalyticsService["Analytics Service"]:::process
-    
+
     %% Data stores
-    CustomerDB[("Customer Info Database<br>- Names, Contact details<br>- Account IDs (identifiable)")]:::datastore
-    BillingDB[("Billing Database<br>- Transaction records<br>- Payment tokens<br>- Billing addresses")]:::datastore
-    FinanceDataLake[("Finance Data Lake<br>- Transaction records (with customer IDs)<br>- Usage data (pseudonymized)")]:::datastore
-    GeneralLedger[("General Ledger System<br>- Aggregated financial data<br>- Limited personal data")]:::datastore
-      subgraph MicrosoftBoundary["Microsoft Internal Systems"]
+    CustomerDB[("Customer Info Database - Names, Contact details, Account IDs")]:::datastore
+    BillingDB[("Billing Database - Transactions, Payment tokens, Addresses")]:::datastore
+    FinanceDataLake[("Finance Data Lake - Transactions (with customer IDs), Usage data (pseudonymized)")]:::datastore
+    GeneralLedger[("General Ledger System - Aggregated financial data, Limited personal data")]:::datastore
+    subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         CommerceSignup
         BillingService
         TaxService
@@ -38,27 +38,27 @@ flowchart LR
         FinanceDataLake
         GeneralLedger
     end
-    
-    %% Data flows
-    Customer -->|"1. Profile info (name, email, address) [via TLS/SSL]"| CommerceSignup
-    CommerceSignup -->|"2. Create customer account with profile data"| CustomerDB
-    Customer -->|"3. Payment details (CC#, exp date) [via TLS/SSL]"| BillingService
-    BillingService -->|"4. Tokenized payment data [encrypted]"| PaymentProcessor
-    PaymentProcessor -->|"5. Payment confirmation"| BillingService
-    BillingService -->|"6. Transaction data (amount, customer ID)"| BillingDB
-    BillingService -->|"7. Tax calculation data (country, transaction type)"| TaxService
-    TaxService -->|"8. Tax obligation data (as required by law)"| TaxAuthority
-    BillingService -->|"9. Payment instruction (tokenized data)"| Bank
-    BillingService -->|"10. Invoice data (name, address, purchase)"| EmailService
-    EmailService -->|"11. Billing email (invoice)"| Customer
-    BillingDB -->|"12. Financial records (pseudonymized)"| FinanceDataLake
-    FinanceDataLake -->|"13. Financial aggregates (anonymized)"| GeneralLedger
-    FinanceDataLake -->|"14. Usage patterns (pseudonymized)"| AnalyticsService
-    
-    %% Additional notes about data regions and retention
-    BillingDB -.->|"EU Datacenter (Primary), US Datacenter (Copy)"| BillingDB
-    FinanceDataLake -.->|"Data retention: 7 years for tax/legal purposes"| FinanceDataLake
-    CustomerDB -.->|"Deleted upon request (except as legally required)"| CustomerDB
+
+    %% Data flows (all edge labels are now single-line)
+    Customer -->|"Profile info to signup"| CommerceSignup
+    CommerceSignup -->|"Create account in DB"| CustomerDB
+    Customer -->|"Payment details to billing"| BillingService
+    BillingService -->|"Tokenized payment to processor"| PaymentProcessor
+    PaymentProcessor -->|"Payment confirmation"| BillingService
+    BillingService -->|"Transaction data to DB"| BillingDB
+    BillingService -->|"Tax calculation data"| TaxService
+    TaxService -->|"Tax obligation data"| TaxAuthority
+    BillingService -->|"Payment instruction to bank"| Bank
+    BillingService -->|"Invoice data to email service"| EmailService
+    EmailService -->|"Billing email to customer"| Customer
+    BillingDB -->|"Financial records to data lake"| FinanceDataLake
+    FinanceDataLake -->|"Aggregates to ledger"| GeneralLedger
+    FinanceDataLake -->|"Usage patterns to analytics"| AnalyticsService
+
+    %% Additional notes about data regions and retention (single-line)
+    BillingDB -.->|"EU/US datacenter copy"| BillingDB
+    FinanceDataLake -.->|"Retention: 7 years for tax/legal"| FinanceDataLake
+    CustomerDB -.->|"Deleted on request (legal exceptions)"| CustomerDB
 ```
 
 ## Legend
