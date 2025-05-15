@@ -24,10 +24,10 @@ flowchart LR
     AnalyticsService["Analytics Service"]:::process
     
     %% Data stores
-    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs (identifiable)")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n- Billing addresses")]:::datastore
-    FinanceDataLake[("Finance Data Lake\n- Transaction records (with customer IDs)\n- Usage data (pseudonymized)")]:::datastore
-    GeneralLedger[("General Ledger System\n- Aggregated financial data\n- Limited personal data")]:::datastore
+    CustomerDB[("Customer Info Database<br>- Names, Contact details<br>- Account IDs (identifiable)")]:::datastore
+    BillingDB[("Billing Database<br>- Transaction records<br>- Payment tokens<br>- Billing addresses")]:::datastore
+    FinanceDataLake[("Finance Data Lake<br>- Transaction records (with customer IDs)<br>- Usage data (pseudonymized)")]:::datastore
+    GeneralLedger[("General Ledger System<br>- Aggregated financial data<br>- Limited personal data")]:::datastore
       subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         CommerceSignup
         BillingService
