@@ -12,6 +12,8 @@ This document provides an overview of the Data Flow Diagrams (DFDs) created for 
    - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/data_retention_deletion.svg)
 4. [External Data Sharing](generated%20md%20files/external_data_sharing.md) - Cross-boundary data transfers to third parties
    - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/external_data_sharing.svg)
+5. [User Journey Perspective](generated%20md%20files/user_journey_perspective.md) - Typical user experience and data flow from a customer's perspective
+   - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/user_journey_perspective.svg)
 
 ## HTML Version
 

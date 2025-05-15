@@ -4,10 +4,11 @@ if (!(Test-Path -Path "svg_exports")) {
 }
 
 $files = @(
-    "data_retention_deletion.md",
-    "external_data_sharing.md",
-    "high_level_overview.md",
-    "transaction_processing_detail.md"
+    "C:\DPIA DFD\generated md files\data_retention_deletion.md",
+    "C:\DPIA DFD\generated md files\external_data_sharing.md",
+    "C:\DPIA DFD\generated md files\high_level_overview.md",
+    "C:\DPIA DFD\generated md files\transaction_processing_detail.md",
+    "C:\DPIA DFD\generated md files\user_journey_perspective.md"
 )
 
 foreach ($file in $files) {
