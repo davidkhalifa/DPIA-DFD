@@ -23,12 +23,11 @@ flowchart LR
     BillingService["Billing Service"]:::process
     TaxService["Tax Service"]:::process
     AnalyticsService["Analytics Service"]:::process
-    
-    %% Data stores
-    CustomerDB[("Customer Info Database\n• Names, Contact details\n• Account IDs (identifiable)")]:::datastore
-    BillingDB[("Billing Database\n• Transaction records\n• Payment tokens\n• Billing addresses")]:::datastore
-    FinanceDataLake[("Finance Data Lake\n• Transaction records (with customer IDs)\n• Usage data (pseudonymized)")]:::datastore
-    GeneralLedger[("General Ledger System\n• Aggregated financial data\n• Limited personal data")]:::datastore
+      %% Data stores
+    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs (identifiable)")]:::datastore
+    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n- Billing addresses")]:::datastore
+    FinanceDataLake[("Finance Data Lake\n- Transaction records (with customer IDs)\n- Usage data (pseudonymized)")]:::datastore
+    GeneralLedger[("General Ledger System\n- Aggregated financial data\n- Limited personal data")]:::datastore
       subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         CommerceSignup
         BillingService
@@ -62,21 +61,21 @@ flowchart LR
     CustomerDB -.->|"Deleted upon request (except as legally required)"| CustomerDB
 ```
 
-## Legend
+  ## Legend
 
-This data flow diagram illustrates:
+  This data flow diagram illustrates:
 
-1. **Data Stores**: Represented as cylinders showing what personal data is stored in each system
-2. **Data Flows**: Shown as arrows with labels indicating what personal data moves between components
-3. **External Entities**: Shown as rounded rectangles outside Microsoft's boundary
-4. **Trust Boundary**: Microsoft's internal systems are enclosed in a subgraph
-5. **Flow Sequence**: Numbered from 1-14 showing the progression of data from collection to analytics
-6. **Data Protection Notes**: Includes encryption indicators and regional storage information
+  1. **Data Stores**: Represented as cylinders showing what personal data is stored in each system
+  2. **Data Flows**: Shown as arrows with labels indicating what personal data moves between components
+  3. **External Entities**: Shown as rounded rectangles outside Microsoft's boundary
+  4. **Trust Boundary**: Microsoft's internal systems are enclosed in a subgraph
+  5. **Flow Sequence**: Numbered from 1-14 showing the progression of data from collection to analytics
+  6. **Data Protection Notes**: Includes encryption indicators and regional storage information
 
-## Key Data Protection Points:
+  ## Key Data Protection Points:
 
-- Personal payment data is tokenized before leaving Microsoft systems
-- All external data transfers use TLS/SSL encryption
-- Personal data is pseudonymized when used for analytics
-- Regional data storage complies with data sovereignty requirements
-- Retention periods are defined based on legal requirements
+  - Personal payment data is tokenized before leaving Microsoft systems
+  - All external data transfers use TLS/SSL encryption
+  - Personal data is pseudonymized when used for analytics
+  - Regional data storage complies with data sovereignty requirements
+  - Retention periods are defined based on legal requirements
