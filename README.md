@@ -4,10 +4,18 @@ This document provides an overview of the Data Flow Diagrams (DFDs) created for 
 
 ## Diagram Index
 
-1. [High Level Overview](high_level_overview.md) - A comprehensive view of all personal data flows in CFP
-2. [Transaction Processing Detail](transaction_processing_detail.md) - Detailed focus on payment and transaction processing
-3. [Data Retention & Deletion](data_retention_deletion.md) - Lifecycle management of personal data including retention and deletion
-4. [External Data Sharing](external_data_sharing.md) - Cross-boundary data transfers to third parties
+1. [High Level Overview](generated%20md%20files/high_level_overview.md) - A comprehensive view of all personal data flows in CFP
+2. [Transaction Processing Detail](generated%20md%20files/transaction_processing_detail.md) - Detailed focus on payment and transaction processing
+3. [Data Retention & Deletion](generated%20md%20files/data_retention_deletion.md) - Lifecycle management of personal data including retention and deletion
+4. [External Data Sharing](generated%20md%20files/external_data_sharing.md) - Cross-boundary data transfers to third parties
+
+## HTML Version
+
+For easier viewing, an HTML version of these diagrams is available. Open the `HTML_Pages/index.html` file in your browser to access:
+
+- Interactive navigation between diagrams
+- Mobile-friendly responsive layout
+- Improved readability and accessibility
 
 ## Diagram Usage Instructions
 
