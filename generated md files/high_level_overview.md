@@ -17,7 +17,7 @@ flowchart LR
     TaxAuthority(["Tax Authority"]):::external
     Bank(["Bank"]):::external
     EmailService(["Email Delivery Service"]):::external
-
+    
     %% Internal processes
     CommerceSignup["Commerce Signup Service"]:::process
     BillingService["Billing Service"]:::process
@@ -25,12 +25,11 @@ flowchart LR
     AnalyticsService["Analytics Service"]:::process
     
     %% Data stores
-    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs (identifiable)")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n- Billing addresses")]:::datastore
-    FinanceDataLake[("Finance Data Lake\n- Transaction records (with customer IDs)\n- Usage data (pseudonymized)")]:::datastore
-    GeneralLedger[("General Ledger System\n- Aggregated financial data\n- Limited personal data")]:::datastore
-    
-    subgraph MicrosoftBoundary["Microsoft Internal Systems"]
+    CustomerDB[("Customer Info Database\n• Names, Contact details\n• Account IDs (identifiable)")]:::datastore
+    BillingDB[("Billing Database\n• Transaction records\n• Payment tokens\n• Billing addresses")]:::datastore
+    FinanceDataLake[("Finance Data Lake\n• Transaction records (with customer IDs)\n• Usage data (pseudonymized)")]:::datastore
+    GeneralLedger[("General Ledger System\n• Aggregated financial data\n• Limited personal data")]:::datastore
+      subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         CommerceSignup
         BillingService
         TaxService
@@ -40,7 +39,8 @@ flowchart LR
         FinanceDataLake
         GeneralLedger
     end
-      %% Data flows
+    
+    %% Data flows
     Customer -->|"1. Profile info (name, email, address) [via TLS/SSL]"| CommerceSignup
     CommerceSignup -->|"2. Create customer account with profile data"| CustomerDB
     Customer -->|"3. Payment details (CC#, exp date) [via TLS/SSL]"| BillingService
@@ -55,7 +55,8 @@ flowchart LR
     BillingDB -->|"12. Financial records (pseudonymized)"| FinanceDataLake
     FinanceDataLake -->|"13. Financial aggregates (anonymized)"| GeneralLedger
     FinanceDataLake -->|"14. Usage patterns (pseudonymized)"| AnalyticsService
-      %% Additional notes about data regions and retention
+    
+    %% Additional notes about data regions and retention
     BillingDB -.->|"EU Datacenter (Primary), US Datacenter (Copy)"| BillingDB
     FinanceDataLake -.->|"Data retention: 7 years for tax/legal purposes"| FinanceDataLake
     CustomerDB -.->|"Deleted upon request (except as legally required)"| CustomerDB
