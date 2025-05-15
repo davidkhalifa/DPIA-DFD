@@ -5,15 +5,19 @@ This document provides an overview of the Data Flow Diagrams (DFDs) created for 
 ## Diagram Index
 
 1. [High Level Overview](generated%20md%20files/high_level_overview.md) - A comprehensive view of all personal data flows in CFP
+   - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/high_level_overview.svg)
 2. [Transaction Processing Detail](generated%20md%20files/transaction_processing_detail.md) - Detailed focus on payment and transaction processing
+   - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/transaction_processing_detail.svg)
 3. [Data Retention & Deletion](generated%20md%20files/data_retention_deletion.md) - Lifecycle management of personal data including retention and deletion
+   - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/data_retention_deletion.svg)
 4. [External Data Sharing](generated%20md%20files/external_data_sharing.md) - Cross-boundary data transfers to third parties
+   - [Direct SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/external_data_sharing.svg)
 
 ## HTML Version
 
 For easier viewing, an HTML version of these diagrams is available:
 
-### [➡️ View Interactive HTML Diagrams Online](https://htmlpreview.github.io/?https://github.com/davidkhalifa/DPIA-DFD/blob/master/HTML_Pages/index.html)
+### [➡️ View Interactive HTML Diagrams Online](https://davidkhalifa.github.io/DPIA-DFD/HTML_Pages/index.html)
 
 You can also view locally by opening the `HTML_Pages/index.html` file in your browser to access:
 
