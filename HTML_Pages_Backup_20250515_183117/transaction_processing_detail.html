@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commerce Financial Platforms (CFP) - Detailed Transaction Processing
+</title>
+    <!-- Mermaid library -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'neutral',
+                fontFamily: 'Segoe UI'
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #0078d4;
+        }
+        h1 {
+            border-bottom: 2px solid #0078d4;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        pre {
+            background-color: #f6f8fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 16px;
+            overflow: auto;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+        }
+        .mermaid {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        p {
+            margin-bottom: 16px;
+        }
+        strong {
+            font-weight: bold;
+        }
+        blockquote {
+            border-left: 4px solid #0078d4;
+            padding-left: 16px;
+            margin-left: 0;
+            color: #666;
+        }
+        a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }        .menu {
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ebebeb;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .menu a {
+            padding: 15px 25px;
+            margin: 0;
+            font-weight: 500;
+            color: #0078d4;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .menu a:hover, .menu a.active {
+            background-color: #f9f9f9;
+            border-bottom: 3px solid #0078d4;
+            text-decoration: none;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>    <div class="menu">
+        <a href="index.html">Home</a>
+        <a href="high_level_overview.html">High Level Overview</a>
+        <a href="data_retention_deletion.html">Data Retention & Deletion</a>        <a href="external_data_sharing.html">External Data Sharing</a>
+        <a href="transaction_processing_detail.html" class="active">Transaction Processing</a>
+        <a href="user_journey_perspective.html">User Journey Perspective</a>
+    </div>
+    <div class="container">
+<h1>Commerce Financial Platforms (CFP) - Detailed Transaction Processing
+</h1>
+
+<p>This diagram provides a detailed view of the transaction processing flow in Microsoft's Commerce Financial Platforms (CFP), focusing on how customer payment data is handled.</p>
+
+<div class='mermaid'>flowchart TD
+    %% Define styles
+    classDef external fill:#f9f,stroke:#333,stroke-width:2px
+    classDef process fill:#bbf,stroke:#333,stroke-width:1px
+    classDef datastore fill:#dfd,stroke:#333,stroke-width:1px,shape:cylinder
+    classDef sensitiveData fill:#fcb,stroke:#f66,stroke-width:2px
+    classDef encrypted fill:#cfc,stroke:#393,stroke-width:1px
+    
+    %% External entities
+    Customer(["Customer"]):::external
+    PaymentProcessor(["Payment Processor"]):::external
+    Bank(["Bank"]):::external
+    
+    %% Internal processes
+    WebPortal["Web Purchase Portal"]:::process
+    CommerceAPI["Commerce API"]:::process
+    BillingService["Billing Service"]:::process
+    TokenizationService["Payment Tokenization Service"]:::sensitiveData
+    InvoiceGenerator["Invoice Generator"]:::process
+    ProvisioningService["Service Provisioning System"]:::process
+    
+    %% Data stores
+    CustomerDB[("Customer Info Database - Names, Contact details, Account IDs")]:::datastore
+    BillingDB[("Billing Database - Transaction records, Payment tokens, Billing addresses")]:::datastore
+    PaymentTokenStore[("Payment Token Store - Tokenized payment methods, No full card numbers")]:::datastore
+    
+    subgraph MicrosoftBoundary["Microsoft Internal Systems"]
+        WebPortal
+        CommerceAPI
+        BillingService
+        TokenizationService
+        InvoiceGenerator
+        ProvisioningService
+        CustomerDB
+        BillingDB
+        PaymentTokenStore
+        
+        subgraph SecurePaymentZone["Secure Payment Processing Zone"]
+            TokenizationService
+            PaymentTokenStore
+        end
+    end
+      %% Data flows - Collection Phase
+    Customer -->|"Profile data (name, email, address) via TLS/SSL"| WebPortal
+    Customer -->|"Payment details (CC#, exp date, CVV) via TLS/SSL"| WebPortal:::sensitiveData
+    WebPortal -->|"Profile data"| CommerceAPI
+    CommerceAPI -->|"Store customer data"| CustomerDB
+    WebPortal -->|"Payment details (sensitive, temporary)"| TokenizationService:::sensitiveData
+      %% Data flows - Processing Phase  
+    TokenizationService -->|"Tokenized payment (token only, no CVV)"| PaymentTokenStore
+    TokenizationService -->|"Payment authorization request (with card details) encrypted"| PaymentProcessor
+    PaymentProcessor -->|"Authorization response"| TokenizationService
+    TokenizationService -->|"Payment token + authorization status"| BillingService
+    BillingService -->|"Create billing record with customer ID & token"| BillingDB
+    BillingService -->|"Request payment using token"| Bank
+    Bank -->|"Payment confirmation"| BillingService
+      %% Data flows - Post-Processing Phase
+    BillingService -->|"Transaction details"| InvoiceGenerator
+    InvoiceGenerator -->|"Invoice ID link"| BillingDB
+    BillingService -->|"Activate subscription (customer ID)"| ProvisioningService
+    ProvisioningService -->|"Subscription active confirmation"| Customer
+    InvoiceGenerator -->|"Invoice (name, address, purchase details)"| Customer
+    
+    %% Indicators for PII handling
+    WebPortal -.->|"PII collected here is encrypted in transit"| WebPortal
+    TokenizationService -.->|"Card data tokenized immediately, CVV never stored"| TokenizationService
+    PaymentTokenStore -.->|"Tokens stored with enhanced security controls"| PaymentTokenStore
+    BillingDB -.->|"Contains customer ID but no raw payment data"| BillingDB</div>
+
+<p>#<h1>Legend
+</h1></p>
+
+<p>This detailed transaction flow diagram illustrates:</p>
+
+<p>
+1. <strong>Sensitive Data Handling</strong>: Red-highlighted components handle sensitive payment information
+<p></p>
+2. <strong>Tokenization</strong>: Credit card details are immediately tokenized and the originals discarded
+<p></p>
+3. <strong>Secure Processing Zones</strong>: Additional security boundary around payment processing
+<p></p>
+4. <strong>Data Minimization</strong>: Each system only accesses the personal data it needs
+<p></p>
+5. <strong>Encryption</strong>: All external transfers are encrypted using TLS/SSL</p>
+
+<p><h1>Key Data Protection Elements:
+</h1></p>
+
+<ul><li>CVV data is never stored and is used only for initial authorization
+</li>
+<li>Full credit card numbers are replaced with tokens for recurring billing
+</li>
+<li>Special security controls are applied to systems handling payment data
+</li>
+<li>Customer data and payment data are stored in separate systems
+</li>
+<li>Encryption is applied to all data in transit
+</li>
+</ul>
+    </div>
+</body>
+</html>
