@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - User Journey Perspective
-</title>
+    <title>Commerce Financial Platforms (CFP) - User Journey Perspective</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -15,8 +14,7 @@
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>
-    <style>
+    </script>    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -53,6 +51,16 @@
             margin: 30px 0;
             padding: 15px 0;
         }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+        }
         ul, ol {
             padding-left: 25px;
         }
@@ -77,26 +85,22 @@
         }
         a:hover {
             text-decoration: underline;
-        }        .menu {
+        }
+        .menu {
             margin-bottom: 30px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #ebebeb;
-            padding: 0;
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .menu a {
-            padding: 15px 25px;
-            margin: 0;
+            margin-right: 15px;
+            padding: 5px 10px;
             font-weight: 500;
-            color: #0078d4;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
+            border-radius: 4px;
         }
-        .menu a:hover, .menu a.active {
-            background-color: #f9f9f9;
-            border-bottom: 3px solid #0078d4;
+        .menu a:hover {
+            background-color: #e0e0e0;
             text-decoration: none;
         }
         .container {
@@ -107,16 +111,16 @@
         }
     </style>
 </head>
-<body>    <div class="menu">
-        <a href="index.html">Home</a>
-        <a href="high_level_overview.html">High Level Overview</a>
-        <a href="data_retention_deletion.html">Data Retention & Deletion</a>        <a href="external_data_sharing.html">External Data Sharing</a>
-        <a href="transaction_processing_detail.html">Transaction Processing</a>
-        <a href="user_journey_perspective.html" class="active">User Journey Perspective</a>
-    </div>
+<body>
     <div class="container">
-<h1>Commerce Financial Platforms (CFP) - User Journey Perspective
-</h1>
+        <div class="menu">
+            <a href="high_level_overview.html">High Level Overview</a>
+            <a href="data_retention_deletion.html">Data Retention & Deletion</a>
+            <a href="external_data_sharing.html">External Data Sharing</a>
+            <a href="transaction_processing_detail.html">Transaction Processing</a>
+            <a href="index.html">Home</a>
+        </div>
+<h1>Commerce Financial Platforms (CFP) - User Journey Perspective</h1>
 
 <p>This diagram illustrates the typical user journey and personal data flow from a customer's perspective when purchasing a Microsoft product online.</p>
 
@@ -204,58 +208,65 @@
     Customer -.->|"Can access & correct billing info via account"| Customer
     DataLifecycle -.->|"Data deleted or anonymized after retention period"| DataLifecycle</div>
 
-<p><h1>Legend
-</h1></p>
+<p>#<h1>User Experience Sequence</h1></p>
+
+<p>This sequence diagram presents the chronological flow of a typical customer's experience when purchasing and using a Microsoft product, highlighting both the visible and behind-the-scenes data processing activities.</p>
+
+<div class='svg-container'><img src='../svg_exports/sequence/user_journey_perspective_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
+
+<p>#<h1>Legend</h1></p>
 
 <p>This user journey data flow diagram illustrates:</p>
 
-1. <strong>User Actions</strong>: Key steps the user takes when purchasing and using Microsoft products
-<p></p>
+<p>1. <strong>User Actions</strong>: Key steps the user takes when purchasing and using Microsoft products
 2. <strong>Data Collection Points</strong>: Where and how personal data enters Microsoft's systems
-<p></p>
 3. <strong>Data Processing</strong>: How personal data is processed for legitimate business purposes
-<p></p>
 4. <strong>Data Storage</strong>: Where personal data is stored and for how long
-<p></p>
 5. <strong>Data Protection</strong>: Security and privacy measures applied to personal data
-<p></p>
-<p></p>
 6. <strong>Data Sharing</strong>: When and why personal data might be shared with third parties
 7. <strong>Data Lifecycle</strong>: How personal data is managed throughout its lifecycle</p>
 
-<p><h1>Key Data Protection Elements:
-</h1></p>
+<p>#<h1>Customer-Centric Processing Details</h1></p>
 
-<ul><li><strong>Security Measures</strong>: All data is transmitted using TLS/SSL encryption
-</li>
-<li><strong>Payment Protection</strong>: Full credit card numbers are not stored; tokenization is used instead
-</li>
-<li><strong>Access Controls</strong>: Only authorized personnel can access personal data on a need-to-know basis
-</li>
-<li><strong>Retention Policies</strong>: Clear retention periods based on legal requirements
-</li>
-<li><strong>User Rights</strong>: Customers can access, correct, and request deletion of their data
-</li>
-<li><strong>Minimal Sharing</strong>: Personal data is only shared when necessary to complete transactions or comply with legal obligations
-</li>
+<p>From the user's perspective, personal data processing in the Commerce Financial Platforms includes:</p>
 
-<p></ul><h1>Plain-Language User Journey:
-</h1></p>
+<p>1. <strong>Account Creation</strong>: Customer provides information to create a profile for purchasing
+2. <strong>Payment Processing</strong>: Credit card details are securely processed and tokenized
+3. <strong>Tax Calculation</strong>: Address information determines applicable taxes
+4. <strong>Service Activation</strong>: Purchase triggers activation of the subscription
+5. <strong>Recurring Billing</strong>: Stored payment token used for subscription renewal (no re-entry of card)
+6. <strong>Customer Support</strong>: Authorized agents can access necessary account information
+7. <strong>User Control</strong>: Customer can view, update, and request deletion of personal information</p>
 
-1. <strong>Providing Information</strong>: The customer provides personal details and payment information when making a purchase
-<p></p>
+<p>#<h1>Privacy Rights Implementation</h1></p>
+
+<p>The system supports customer privacy rights through:</p>
+
+<p>1. <strong>Transparency</strong>: Clear communication about what data is collected and how it's used
+2. <strong>Access</strong>: Customer can view their stored personal information through account settings
+3. <strong>Correction</strong>: Self-service options to update contact and billing information
+4. <strong>Deletion</strong>: Process to delete personal data with clear explanation of legal retention exceptions
+5. <strong>Security</strong>: Multi-layered protection including encryption, access controls, and tokenization
+6. <strong>Purpose Limitation</strong>: Data used only for billing, service delivery, and legal requirements</p>
+
+<p>#<h1>Key Data Protection Elements:</h1></p>
+
+<ul><li><strong>Security Measures</strong>: All data is transmitted using TLS/SSL encryption</li>
+<li><strong>Payment Protection</strong>: Full credit card numbers are not stored; tokenization is used instead</li>
+<li><strong>Access Controls</strong>: Only authorized personnel can access personal data on a need-to-know basis</li>
+<li><strong>Retention Policies</strong>: Clear retention periods based on legal requirements</li>
+<li><strong>User Rights</strong>: Customers can access, correct, and request deletion of their data</li>
+<li><strong>Minimal Sharing</strong>: Personal data is only shared when necessary to complete transactions or comply with legal obligations</li>
+
+<p></ul>#<h1>Plain-Language User Journey:</h1></p>
+
+<p>1. <strong>Providing Information</strong>: The customer provides personal details and payment information when making a purchase
 2. <strong>Account Creation</strong>: Microsoft creates a billing account for the customer
-<p></p>
 3. <strong>Payment Processing</strong>: Payment details are securely processed through a payment service
-<p></p>
 4. <strong>Order Record</strong>: Microsoft generates and stores an order record and invoice
-<p></p>
 5. <strong>Service Activation</strong>: The purchased service is activated for the customer
-<p></p>
 6. <strong>Ongoing Service</strong>: Microsoft periodically uses the data for billing and service provision
-<p></p>
 7. <strong>Customer Support</strong>: If needed, support agents can access relevant customer information
-<p></p>
 8. <strong>Data Management</strong>: Personal data is protected throughout its lifecycle and eventually deleted or anonymized</p>
     </div>
 </body>

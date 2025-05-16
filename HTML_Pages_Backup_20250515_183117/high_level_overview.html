@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - High Level Data Flow Overview
-</title>
+    <title>Commerce Financial Platforms (CFP) - High Level Data Flow Overview</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -52,6 +51,16 @@
             margin: 30px 0;
             padding: 15px 0;
         }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+        }
         ul, ol {
             padding-left: 25px;
         }
@@ -73,28 +82,25 @@
         a {
             color: #0078d4;
             text-decoration: none;
-        }        a:hover {
+        }
+        a:hover {
             text-decoration: underline;
-        }        .menu {
+        }
+        .menu {
             margin-bottom: 30px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #ebebeb;
-            padding: 0;
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .menu a {
-            padding: 15px 25px;
-            margin: 0;
+            margin-right: 15px;
+            padding: 5px 10px;
             font-weight: 500;
-            color: #0078d4;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
+            border-radius: 4px;
         }
-        .menu a:hover, .menu a.active {
-            background-color: #f9f9f9;
-            border-bottom: 3px solid #0078d4;
+        .menu a:hover {
+            background-color: #e0e0e0;
             text-decoration: none;
         }
         .container {
@@ -106,17 +112,15 @@
     </style>
 </head>
 <body>
-    <div class="menu">
-        <a href="index.html">Home</a>
-        <a href="high_level_overview.html" class="active">High Level Overview</a>
-        <a href="data_retention_deletion.html">Data Retention & Deletion</a>
-        <a href="external_data_sharing.html">External Data Sharing</a>
-        <a href="transaction_processing_detail.html">Transaction Processing</a>
-        <a href="user_journey_perspective.html">User Journey Perspective</a>
-    </div>
     <div class="container">
-<h1>Commerce Financial Platforms (CFP) - High Level Data Flow Overview
-</h1>
+        <div class="menu">
+            <a href="high_level_overview.html">High Level Overview</a>
+            <a href="data_retention_deletion.html">Data Retention & Deletion</a>
+            <a href="external_data_sharing.html">External Data Sharing</a>
+            <a href="transaction_processing_detail.html">Transaction Processing</a>
+            <a href="index.html">Home</a>
+        </div>
+<h1>Commerce Financial Platforms (CFP) - High Level Data Flow Overview</h1>
 
 <p>This diagram provides a high-level overview of personal data flows through Microsoft's Commerce Financial Platforms (CFP) system, from collection to deletion.</p>
 
@@ -177,38 +181,40 @@
     FinanceDataLake -.->|"Retention: 7 years for tax/legal"| FinanceDataLake
     CustomerDB -.->|"Deleted on request (legal exceptions)"| CustomerDB</div>
 
-<p><h1>Legend
-</h1></p>
+<p>#<h1>Sequence of Operations</h1></p>
 
-<p>This data retention & deletion flow diagram illustrates:</p>
+<p>The following sequence diagram illustrates the chronological flow of personal data through the Commerce Financial Platforms system, highlighting the interactions between different components and the lifecycle stages of data.</p>
 
+<div class='svg-container'><img src='../svg_exports/sequence/high_level_overview_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
+
+<p>#<h1>Legend</h1></p>
 
 <p>This data flow diagram illustrates:</p>
 
-    1. <strong>Data Stores</strong>: Represented as cylinders showing what personal data is stored in each system
-    <p></p>
-    2. <strong>Data Flows</strong>: Shown as arrows with labels indicating what personal data moves between components
-    <p></p>
-    3. <strong>External Entities</strong>: Shown as rounded rectangles outside Microsoft's boundary
-    <p></p>
-    4. <strong>Trust Boundary</strong>: Microsoft's internal systems are enclosed in a subgraph
-    <p></p>
-    5. <strong>Flow Sequence</strong>: Numbered from 1-14 showing the progression of data from collection to analytics
-    <p></p>
-    6.<strong>Data Protection Notes</strong>: Includes encryption indicators and regional storage information    
-    <p></p>
+<p>1. <strong>Data Stores</strong>: Represented as cylinders showing what personal data is stored in each system
+2. <strong>Data Flows</strong>: Shown as arrows with labels indicating what personal data moves between components
+3. <strong>External Entities</strong>: Shown as rounded rectangles outside Microsoft's boundary
+4. <strong>Trust Boundary</strong>: Microsoft's internal systems are enclosed in a subgraph
+5. <strong>Flow Sequence</strong>: Numbered from 1-14 showing the progression of data from collection to analytics
+6. <strong>Data Protection Notes</strong>: Includes encryption indicators and regional storage information</p>
 
+<p>#<h1>Key Data Protection Points:</h1></p>
 
+<ul><li>Personal payment data is tokenized before leaving Microsoft systems</li>
+<li>All external data transfers use TLS/SSL encryption</li>
+<li>Personal data is pseudonymized when used for analytics</li>
+<li>Regional data storage complies with data sovereignty requirements</li>
+<li>Retention periods are defined based on legal requirements</li>
 
-<h2>Key Data Protection Points:</h2>
+<p></ul>#<h1>Lifecycle Overview</h1></p>
 
-<ul>
-    <li>Personal payment data is tokenized before leaving Microsoft systems</li>
-    <li>All external data transfers use TLS/SSL encryption</li>
-    <li>Personal data is pseudonymized when used for analytics</li>
-    <li>Regional data storage complies with data sovereignty requirements</li>
-    <li>Retention periods are defined based on legal requirements</li>
-</ul>
+<p>The Commerce Financial Platforms system processes personal data through distinct stages:</p>
+
+<p>1. <strong>Collection</strong>: Customer provides personal information during signup and purchase
+2. <strong>Processing</strong>: Data is used to process payments, calculate taxes, and deliver products
+3. <strong>Storage</strong>: Information is stored according to purpose-based retention policies
+4. <strong>Sharing</strong>: Minimal necessary data is shared with external parties like payment processors
+5. <strong>Deletion</strong>: Customer data is removed or anonymized upon request or after retention periods</p>
     </div>
 </body>
 </html>

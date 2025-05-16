@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow</title>
+    <title>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow
+</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -14,7 +15,8 @@
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>    <style>
+    </script>
+    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -51,16 +53,6 @@
             margin: 30px 0;
             padding: 15px 0;
         }
-        .svg-container {
-            text-align: center;
-            margin: 30px 0;
-            padding: 15px 0;
-        }
-        .svg-diagram {
-            max-width: 100%;
-            height: auto;
-            display: inline-block;
-        }
         ul, ol {
             padding-left: 25px;
         }
@@ -85,22 +77,26 @@
         }
         a:hover {
             text-decoration: underline;
-        }
-        .menu {
+        }        .menu {
             margin-bottom: 30px;
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+            border-bottom: 1px solid #ebebeb;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
         }
         .menu a {
-            margin-right: 15px;
-            padding: 5px 10px;
+            padding: 15px 25px;
+            margin: 0;
             font-weight: 500;
-            border-radius: 4px;
+            color: #0078d4;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
         }
-        .menu a:hover {
-            background-color: #e0e0e0;
+        .menu a:hover, .menu a.active {
+            background-color: #f9f9f9;
+            border-bottom: 3px solid #0078d4;
             text-decoration: none;
         }
         .container {
@@ -111,16 +107,16 @@
         }
     </style>
 </head>
-<body>
+<body>    <div class="menu">
+        <a href="index.html">Home</a>
+        <a href="high_level_overview.html">High Level Overview</a>
+        <a href="data_retention_deletion.html" class="active">Data Retention & Deletion</a>        <a href="external_data_sharing.html">External Data Sharing</a>
+        <a href="transaction_processing_detail.html">Transaction Processing</a>
+        <a href="user_journey_perspective.html">User Journey Perspective</a>
+    </div>
     <div class="container">
-        <div class="menu">
-            <a href="high_level_overview.html">High Level Overview</a>
-            <a href="data_retention_deletion.html">Data Retention & Deletion</a>
-            <a href="external_data_sharing.html">External Data Sharing</a>
-            <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="index.html">Home</a>
-        </div>
-<h1>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow</h1>
+<h1>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow
+</h1>
 
 <p>This diagram shows the lifecycle, retention, and deletion processes for personal data in Microsoft's Commerce Financial Platforms (CFP).</p>
 
@@ -203,50 +199,80 @@
     ArchiveStorage -.->|"Archived with minimal personal data"| ArchiveStorage
     AnonymousAnalytics -.->|"No identifiable personal data"| AnonymousAnalytics</div>
 
-<p>#<h1>Data Lifecycle Sequence</h1></p>
+ <p>#<h1>Data Lifecycle Sequence
+</h1></p>
 
 <p>This sequence diagram illustrates the temporal flow of personal data through its complete lifecycle in the Commerce Financial Platforms, from initial collection to eventual deletion or anonymization.</p>
 
 <div class='svg-container'><img src='../svg_exports/sequence/data_retention_deletion_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
-
-<p>#<h1>Legend</h1></p>
+   
+<p><h1>Legend
+</h1></p>
 
 <p>This data retention & deletion flow diagram illustrates:</p>
 
-<p>1. <strong>Data Lifecycle</strong>: Showing how data moves from active systems to archive/anonymized systems
+<p>
+1. <strong>Data Lifecycle</strong>: Showing how data moves from active systems to archive/anonymized systems
+ <p></p>
 2. <strong>Retention Periods</strong>: Clearly marked retention timeframes for each data store
+<p></p>
 3. <strong>Deletion Process</strong>: How customer deletion requests are handled across systems
+<p></p>
 4. <strong>Legal Constraints</strong>: Indicating where data must be retained for legal/tax purposes
-5. <strong>Anonymization</strong>: Showing where and how data is anonymized for long-term analytics</p>
+<p></p>
+5. <strong>Anonymization</strong>: Showing where and how data is anonymized for long-term analytics</li>
 
-<p>#<h1>Key Data Protection Elements:</h1></p>
+</p>
 
-<ul><li>Clear retention periods defined for all personal data</li>
-<li>Automatic deletion triggers based on retention periods</li>
-<li>Process for handling customer deletion requests</li>
-<li>Pseudonymization and anonymization for data that must be retained</li>
+<p><h1>Key Data Protection Elements:
+</h1></p>
 
-<p></ul>#<h1>Detailed Retention Policies</h1></p>
+<ul><li>Clear retention periods defined for all personal data
+</li>
+<li>Automatic deletion triggers based on retention periods
+</li>
+<li>Process for handling customer deletion requests
+</li>
+<li>Pseudonymization and anonymization for data that must be retained
+</li>
+<li>Separation between active systems and archive/analytical systems
+</li>
+<p></ul>#<h1>Detailed Retention Policies
+</h1></p>
 
 <p>The Commerce Financial Platforms implements time-based retention policies:</p>
 
-<p>1. <strong>Active Customer Data</strong>: Retained while account is active plus 2 years
+<p>
+1. <strong>Active Customer Data</strong>: Retained while account is active plus 2 years
+<p></p>
 2. <strong>Transaction Records</strong>: Retained for 3 years from transaction date
+<p></p>
 3. <strong>Financial Records</strong>: Retained for 7 years to meet tax requirements
+<p></p>
 4. <strong>Ledger Data</strong>: Retained for 10 years to meet accounting/audit requirements
+<p></p>
 5. <strong>Archived Data</strong>: Contains minimal personal data, maintained for 7-10 years based on legal requirements
+<p></p>
 6. <strong>Analytics Data</strong>: Fully anonymized with no personal identifiers, retained indefinitely</p>
-
-<p>#<h1>Customer Rights Implementation</h1></p>
+<p></p>
+<p><h1>Customer Rights Implementation
+</h1></p>
 
 <p>When a customer exercises their deletion rights:</p>
 
-<p>1. Personal data is immediately deleted from active systems where legally permitted
+<p>
+1. Personal data is immediately deleted from active systems where legally permitted
+<p></p>
 2. Data with legal retention requirements is pseudonymized to remove direct identifiers
+<p></p>
 3. Customer receives transparent confirmation of what was deleted vs. retained
+<p></p>
 4. Remaining pseudonymized data is deleted after legal retention periods expire
-<ul><li>Separation between active systems and archive/analytical systems</li>
-</ul></p>
+<p></p>
+5. Separation between active systems and archive/analytical systems
+    <p></p>
+</li>
+</ul>
     </div>
 </body>
 </html>
