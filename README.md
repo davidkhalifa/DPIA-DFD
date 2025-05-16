@@ -6,19 +6,19 @@ This document provides an overview of the Data Flow Diagrams (DFDs) created for 
 
 1. [High Level Overview](generated%20md%20files/high_level_overview.md) - A comprehensive view of all personal data flows in CFP
    - [Direct DFD SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/high_level_overview.svg)
-   - [Direct Sequnece Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/high_level_overview_2.svg)
+   - [Direct Sequence Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/high_level_overview_2.svg)
 2. [Transaction Processing Detail](generated%20md%20files/transaction_processing_detail.md) - Detailed focus on payment and transaction processing
    - [Direct DFD SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/transaction_processing_detail.svg)
-   - [Direct Sequnece Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/transaction_processing_detail_2.svg)
+   - [Direct Sequence Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/transaction_processing_detail_2.svg)
 3. [Data Retention & Deletion](generated%20md%20files/data_retention_deletion.md) - Lifecycle management of personal data including retention and deletion
    - [Direct DFD SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/data_retention_deletion.svg)
-   - [Direct Sequnece Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/data_retention_deletion_2.svg)
+   - [Direct Sequence Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/data_retention_deletion_2.svg)
 4. [External Data Sharing](generated%20md%20files/external_data_sharing.md) - Cross-boundary data transfers to third parties
    - [Direct DFD SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/external_data_sharing.svg)
-   - [Direct Sequnece Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/external_data_sharing_2.svg)
+   - [Direct Sequence Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/external_data_sharing_2.svg)
 5. [User Journey Perspective](generated%20md%20files/user_journey_perspective.md) - Typical user experience and data flow from a customer's perspective
    - [Direct DFD SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/user_journey_perspective.svg)
-   - [Direct Sequnece Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/user_journey_perspective_2.svg)
+   - [Direct Sequence Diagram SVG](https://github.com/davidkhalifa/DPIA-DFD/raw/master/svg_exports/sequence/user_journey_perspective_2.svg)
 
 
 ## HTML Version
