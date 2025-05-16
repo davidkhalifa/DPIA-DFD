@@ -30,10 +30,10 @@ flowchart TB
     DataLifecycle["Data Retention & Deletion"]:::retention
     
     %% Data stores
-    CustomerDB[("Customer Database\n- Names, Contact details\n- Account IDs")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens (not full CC#)\n- Billing addresses")]:::datastore
-    FinanceDB[("Financial Records\n- Invoices, Receipts\n- Tax calculations\n- Usage data")]:::datastore
-    ServiceDB[("Service Database\n- Subscription status\n- Usage metrics")]:::datastore
+    CustomerDB[("Customer Database - Names, Contact details, Account IDs")]:::datastore
+    BillingDB[("Billing Database - Transaction records, Payment tokens (not full CC#), Billing addresses")]:::datastore
+    FinanceDB[("Financial Records - Invoices, Receipts, Tax calculations, Usage data")]:::datastore
+    ServiceDB[("Service Database - Subscription status, Usage metrics")]:::datastore
     
     subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         CommerceWebsite
@@ -49,47 +49,158 @@ flowchart TB
         FinanceDB
         ServiceDB
     end
+      %% Data flows - Initial purchase
+    Customer -->|"Personal info (name, address, email) via TLS/SSL"| CommerceWebsite
+    Customer -->|"Credit card details (CC#, exp date) via TLS/SSL"| CommerceWebsite
+    CommerceWebsite -->|"Create customer account"| AccountCreation
+    AccountCreation -->|"Store customer profile"| CustomerDB
+    CommerceWebsite -->|"Process payment (secured/encrypted)"| PaymentProcessing
+    PaymentProcessing -->|"Tokenized payment data (not full CC#)"| PaymentProcessor
+    PaymentProcessor -->|"Process payment with bank"| Bank
+    Bank -->|"Payment confirmation"| PaymentProcessor
+    PaymentProcessor -->|"Payment approval"| PaymentProcessing
+    PaymentProcessing -->|"Store payment token & transaction"| BillingDB
+    AccountCreation -->|"Customer location for tax calculation"| OrderGeneration
+    OrderGeneration -->|"Calculate applicable taxes"| TaxAuthority
+    OrderGeneration -->|"Generate invoice & store record"| FinanceDB
+    OrderGeneration -->|"Send invoice to customer"| EmailService
+    EmailService -->|"Email invoice to customer"| Customer
+      %% Data flows - Subsequent service usage
+    OrderGeneration -->|"Activate subscription"| SubscriptionActivation
+    SubscriptionActivation -->|"Create service record"| ServiceDB
+    SubscriptionActivation -->|"Welcome email"| EmailService
+    ServiceDB -->|"Track usage & renewal dates"| OngoingBilling
+    OngoingBilling -->|"Periodic billing (using stored token)"| PaymentProcessing
+    OngoingBilling -->|"Update finance records"| FinanceDB
+      %% Data flows - Support and data lifecycle
+    Customer -->|"Billing or account inquiry"| CustomerSupport
+    CustomerSupport -->|"Access customer records (as needed)"| CustomerDB
+    CustomerSupport -->|"Access billing records (as needed)"| BillingDB
+    Customer -->|"Request data deletion"| DataLifecycle
+    DataLifecycle -->|"Remove personal data (where legally permitted)"| CustomerDB
+    DataLifecycle -->|"Pseudonymize data (for legal retention)"| BillingDB
+    DataLifecycle -->|"Retain financial records (required by law)"| FinanceDB
+      %% Annotations for key data protection elements
+    CustomerDB -.->|"Secured by encryption & access controls"| CustomerDB
+    BillingDB -.->|"PCI compliant, No full CC# stored"| BillingDB
+    FinanceDB -.->|"Retained for 7+ years for tax/legal purposes"| FinanceDB
+    Customer -.->|"Can access & correct billing info via account"| Customer
+    DataLifecycle -.->|"Data deleted or anonymized after retention period"| DataLifecycle
+```
+
+## User Experience Sequence
+
+This sequence diagram presents the chronological flow of a typical customer's experience when purchasing and using a Microsoft product, highlighting both the visible and behind-the-scenes data processing activities.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Customer as John Doe (Customer)
+    participant CW as Commerce Website
+    participant AC as Account Creation
+    participant PP as Payment Processing
+    participant PProc as Payment Processor
+    participant Bank
+    participant OG as Order Generation
+    participant TA as Tax Authority
+    participant SA as Subscription Activation
+    participant ES as Email Service
+    participant OB as Ongoing Billing
+    participant CS as Customer Support
+    participant DL as Data Lifecycle
+    participant CDB as Customer Database
+    participant BDB as Billing Database
+    participant FDB as Finance Database
+    participant SDB as Service Database
     
-    %% Data flows - Initial purchase
-    Customer -->|"1. Personal info\n(name, address, email)\n[via TLS/SSL]"| CommerceWebsite
-    Customer -->|"2. Credit card details\n(CC#, exp date)\n[via TLS/SSL]"| CommerceWebsite
-    CommerceWebsite -->|"3. Create customer\naccount"| AccountCreation
-    AccountCreation -->|"4. Store customer\nprofile"| CustomerDB
-    CommerceWebsite -->|"5. Process payment\n(secured/encrypted)"| PaymentProcessing
-    PaymentProcessing -->|"6. Tokenized payment\ndata (not full CC#)"| PaymentProcessor
-    PaymentProcessor -->|"7. Process payment\nwith bank"| Bank
-    Bank -->|"8. Payment\nconfirmation"| PaymentProcessor
-    PaymentProcessor -->|"9. Payment\napproval"| PaymentProcessing
-    PaymentProcessing -->|"10. Store payment\ntoken & transaction"| BillingDB
-    AccountCreation -->|"11. Customer location\nfor tax calculation"| OrderGeneration
-    OrderGeneration -->|"12. Calculate\napplicable taxes"| TaxAuthority
-    OrderGeneration -->|"13. Generate invoice\n& store record"| FinanceDB
-    OrderGeneration -->|"14. Send invoice\nto customer"| EmailService
-    EmailService -->|"15. Email invoice\nto customer"| Customer
+    rect rgba(245, 245, 255, 0.5)
+        Note over Customer, SDB: Stage 1: Initial Purchase - What the Customer Experiences
+        Customer->>CW: Visit Microsoft website to purchase Office 365
+        Customer->>CW: Enter personal information (name, address, email)
+        Note right of Customer: "I'm providing my contact info to create an account"
+        Customer->>CW: Enter credit card details to make payment
+        Note right of Customer: "I'm providing payment info to complete the purchase"
+        
+        CW->>AC: Forward customer information for account creation
+        AC->>CDB: Create new customer record
+        CW->>PP: Forward payment details for processing
+        PP->>PProc: Send tokenized payment data
+        PProc->>Bank: Request payment authorization
+        Bank-->>PProc: Confirm payment approved
+        PProc-->>PP: Return authorization confirmation
+        PP->>BDB: Store payment token (no full card number)
+        
+        AC->>OG: Forward customer location for tax calculation
+        OG->>TA: Request applicable tax calculation
+        TA-->>OG: Return tax rates and amounts
+        OG->>FDB: Generate and store invoice with tax
+        OG->>ES: Send invoice to customer
+        ES->>Customer: Deliver invoice via email
+        Note right of Customer: "I received confirmation of my purchase"
+        
+        OG->>SA: Request service activation
+        SA->>SDB: Create subscription record
+        SA->>ES: Generate welcome email
+        ES->>Customer: Send welcome and getting started information
+        Note right of Customer: "My Office 365 subscription is now active"
+    end
     
-    %% Data flows - Subsequent service usage
-    OrderGeneration -->|"16. Activate\nsubscription"| SubscriptionActivation
-    SubscriptionActivation -->|"17. Create service\nrecord"| ServiceDB
-    SubscriptionActivation -->|"18. Welcome\nemail"| EmailService
-    ServiceDB -->|"19. Track usage\n& renewal dates"| OngoingBilling
-    OngoingBilling -->|"20. Periodic billing\n(using stored token)"| PaymentProcessing
-    OngoingBilling -->|"21. Update finance\nrecords"| FinanceDB
+    rect rgba(245, 255, 245, 0.5)
+        Note over Customer, SDB: Stage 2: Ongoing Service Usage
+        Customer->>Customer: Uses Office 365 service regularly
+        Note right of Customer: "I'm using the product I purchased"
+        
+        SDB->>OB: Track usage and approaching renewal
+        OB->>PP: Initiate recurring billing (using stored token)
+        PP->>PProc: Process recurring payment
+        PProc->>Bank: Request payment authorization
+        Bank-->>PProc: Confirm payment approved
+        PProc-->>PP: Return authorization confirmation
+        OB->>FDB: Update subscription billing records
+        OB->>ES: Generate new invoice
+        ES->>Customer: Send new period invoice via email
+        Note right of Customer: "I received confirmation of my renewed subscription"
+    end
     
-    %% Data flows - Support and data lifecycle
-    Customer -->|"22. Billing or\naccount inquiry"| CustomerSupport
-    CustomerSupport -->|"23. Access customer\nrecords (as needed)"| CustomerDB
-    CustomerSupport -->|"24. Access billing\nrecords (as needed)"| BillingDB
-    Customer -->|"25. Request data\ndeletion"| DataLifecycle
-    DataLifecycle -->|"26. Remove personal data\n(where legally permitted)"| CustomerDB
-    DataLifecycle -->|"27. Pseudonymize data\n(for legal retention)"| BillingDB
-    DataLifecycle -->|"28. Retain financial records\n(required by law)"| FinanceDB
+    rect rgba(255, 245, 245, 0.5)
+        Note over Customer, SDB: Stage 3: Customer Support Interaction
+        Customer->>CS: Contact support with billing question
+        Note right of Customer: "I need help understanding a charge on my invoice"
+        
+        CS->>CDB: Look up customer account information
+        CS->>BDB: Retrieve relevant transaction details
+        CS->>FDB: Access invoice history
+        CS->>Customer: Provide explanation and resolve issue
+        Note right of Customer: "The support agent could see my billing history"
+    end
     
-    %% Annotations for key data protection elements
-    CustomerDB -.->|"Secured by encryption\n& access controls"| CustomerDB
-    BillingDB -.->|"PCI compliant\nNo full CC# stored"| BillingDB
-    FinanceDB -.->|"Retained for 7+ years\nfor tax/legal purposes"| FinanceDB
-    Customer -.->|"Can access & correct\nbilling info via account"| Customer
-    DataLifecycle -.->|"Data deleted or anonymized\nafter retention period"| DataLifecycle
+    rect rgba(255, 255, 235, 0.5)
+        Note over Customer, SDB: Stage 4: Data Control & Deletion Request
+        Customer->>CW: Log in to account settings
+        CW->>CDB: Retrieve current account information
+        CDB-->>CW: Return profile data
+        CW->>Customer: Display current profile information
+        Customer->>CW: Update contact information
+        CW->>CDB: Update stored profile data
+        
+        Customer->>DL: Submit request to delete personal data
+        Note right of Customer: "I want to exercise my right to deletion"
+        
+        DL->>CDB: Delete personal identifiers where permitted
+        DL->>BDB: Pseudonymize billing records
+        DL->>FDB: Mark financial records (retained for legal requirements)
+        DL->>Customer: Confirm data deletion actions taken
+        Note right of Customer: "I received confirmation of what was deleted vs. retained"
+    end
+    
+    rect rgba(240, 240, 240, 0.5)
+        Note over Customer, SDB: Data Protection Throughout User Journey
+        Note over PP, BDB: Payment data immediately tokenized, CVV never stored
+        Note over CDB, FDB: All stored data encrypted at rest
+        Note over CW, ES: All data transfers use TLS/SSL encryption
+        Note over CS, BDB: Support agents have limited, audited access
+        Note over DL, FDB: Automatic deletion after retention periods expire
+    end
 ```
 
 ## Legend
@@ -103,6 +214,29 @@ This user journey data flow diagram illustrates:
 5. **Data Protection**: Security and privacy measures applied to personal data
 6. **Data Sharing**: When and why personal data might be shared with third parties
 7. **Data Lifecycle**: How personal data is managed throughout its lifecycle
+
+## Customer-Centric Processing Details
+
+From the user's perspective, personal data processing in the Commerce Financial Platforms includes:
+
+1. **Account Creation**: Customer provides information to create a profile for purchasing
+2. **Payment Processing**: Credit card details are securely processed and tokenized
+3. **Tax Calculation**: Address information determines applicable taxes
+4. **Service Activation**: Purchase triggers activation of the subscription
+5. **Recurring Billing**: Stored payment token used for subscription renewal (no re-entry of card)
+6. **Customer Support**: Authorized agents can access necessary account information
+7. **User Control**: Customer can view, update, and request deletion of personal information
+
+## Privacy Rights Implementation
+
+The system supports customer privacy rights through:
+
+1. **Transparency**: Clear communication about what data is collected and how it's used
+2. **Access**: Customer can view their stored personal information through account settings
+3. **Correction**: Self-service options to update contact and billing information
+4. **Deletion**: Process to delete personal data with clear explanation of legal retention exceptions
+5. **Security**: Multi-layered protection including encryption, access controls, and tokenization
+6. **Purpose Limitation**: Data used only for billing, service delivery, and legal requirements
 
 ## Key Data Protection Elements:
 

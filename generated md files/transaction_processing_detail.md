@@ -25,9 +25,9 @@ flowchart TD
     ProvisioningService["Service Provisioning System"]:::process
     
     %% Data stores
-    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n- Billing addresses")]:::datastore
-    PaymentTokenStore[("Payment Token Store\n- Tokenized payment methods\n- No full card numbers")]:::datastore
+    CustomerDB[("Customer Info Database - Names, Contact details, Account IDs")]:::datastore
+    BillingDB[("Billing Database - Transaction records, Payment tokens, Billing addresses")]:::datastore
+    PaymentTokenStore[("Payment Token Store - Tokenized payment methods, No full card numbers")]:::datastore
     
     subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         WebPortal
@@ -45,35 +45,104 @@ flowchart TD
             PaymentTokenStore
         end
     end
-    
-    %% Data flows - Collection Phase
-    Customer -->|"1. Profile data\n(name, email, address)\n[via TLS/SSL]"| WebPortal
-    Customer -->|"2. Payment details\n(CC#, exp date, CVV)\n[via TLS/SSL]"| WebPortal:::sensitiveData
-    WebPortal -->|"3. Profile data"| CommerceAPI
-    CommerceAPI -->|"4. Store customer data"| CustomerDB
-    WebPortal -->|"5. Payment details\n(sensitive, temporary)"| TokenizationService:::sensitiveData
-    
-    %% Data flows - Processing Phase  
-    TokenizationService -->|"6. Tokenized payment\n(token only, no CVV)"| PaymentTokenStore
-    TokenizationService -->|"7. Payment authorization request\n(with card details)\n[encrypted]"| PaymentProcessor
-    PaymentProcessor -->|"8. Authorization\nresponse"| TokenizationService
-    TokenizationService -->|"9. Payment token\n+ authorization status"| BillingService
-    BillingService -->|"10. Create billing record\nwith customer ID & token"| BillingDB
-    BillingService -->|"11. Request payment\nusing token"| Bank
-    Bank -->|"12. Payment\nconfirmation"| BillingService
-    
-    %% Data flows - Post-Processing Phase
-    BillingService -->|"13. Transaction\ndetails"| InvoiceGenerator
-    InvoiceGenerator -->|"14. Invoice\nID link"| BillingDB
-    BillingService -->|"15. Activate subscription\n(customer ID)"| ProvisioningService
-    ProvisioningService -->|"16. Subscription active\nconfirmation"| Customer
-    InvoiceGenerator -->|"17. Invoice\n(name, address, purchase details)"| Customer
+      %% Data flows - Collection Phase
+    Customer -->|"Profile data (name, email, address) via TLS/SSL"| WebPortal
+    Customer -->|"Payment details (CC#, exp date, CVV) via TLS/SSL"| WebPortal:::sensitiveData
+    WebPortal -->|"Profile data"| CommerceAPI
+    CommerceAPI -->|"Store customer data"| CustomerDB
+    WebPortal -->|"Payment details (sensitive, temporary)"| TokenizationService:::sensitiveData
+      %% Data flows - Processing Phase  
+    TokenizationService -->|"Tokenized payment (token only, no CVV)"| PaymentTokenStore
+    TokenizationService -->|"Payment authorization request (with card details) encrypted"| PaymentProcessor
+    PaymentProcessor -->|"Authorization response"| TokenizationService
+    TokenizationService -->|"Payment token + authorization status"| BillingService
+    BillingService -->|"Create billing record with customer ID & token"| BillingDB
+    BillingService -->|"Request payment using token"| Bank
+    Bank -->|"Payment confirmation"| BillingService
+      %% Data flows - Post-Processing Phase
+    BillingService -->|"Transaction details"| InvoiceGenerator
+    InvoiceGenerator -->|"Invoice ID link"| BillingDB
+    BillingService -->|"Activate subscription (customer ID)"| ProvisioningService
+    ProvisioningService -->|"Subscription active confirmation"| Customer
+    InvoiceGenerator -->|"Invoice (name, address, purchase details)"| Customer
     
     %% Indicators for PII handling
-    WebPortal -.->|"PII collected here\nis encrypted in transit"| WebPortal
-    TokenizationService -.->|"Card data tokenized immediately\nCVV never stored"| TokenizationService
-    PaymentTokenStore -.->|"Tokens stored with\nenhanced security controls"| PaymentTokenStore
-    BillingDB -.->|"Contains customer ID\nbut no raw payment data"| BillingDB
+    WebPortal -.->|"PII collected here is encrypted in transit"| WebPortal
+    TokenizationService -.->|"Card data tokenized immediately, CVV never stored"| TokenizationService
+    PaymentTokenStore -.->|"Tokens stored with enhanced security controls"| PaymentTokenStore
+    BillingDB -.->|"Contains customer ID but no raw payment data"| BillingDB
+```
+
+## Detailed Transaction Sequence
+
+The following sequence diagram shows the detailed step-by-step process of a customer transaction, highlighting the security measures in place for handling sensitive payment information.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Customer
+    participant WP as Web Purchase Portal
+    participant CA as Commerce API
+    participant TS as Tokenization Service
+    participant PP as Payment Processor
+    participant BS as Billing Service
+    participant Bank
+    participant IG as Invoice Generator
+    participant PS as Provisioning Service
+    participant CDB as Customer DB
+    participant BDB as Billing DB
+    participant PTS as Payment Token Store
+    
+    rect rgba(255, 245, 230, 0.5)
+        Note over Customer, PTS: 1. Data Collection Phase - PII and Payment Information
+        Customer->>WP: Enter profile data (name, email, address)
+        Note right of WP: Data encrypted using TLS/SSL
+        Customer->>WP: Enter payment details (card number, expiry, CVV)
+        Note right of WP: Payment data encrypted using TLS/SSL
+        WP->>CA: Forward profile data
+        CA->>CDB: Create/update customer record
+        WP->>TS: Forward payment details (sensitive)
+        Note right of TS: Card data enters secure payment zone
+        TS->>PTS: Create payment token (store token, discard CVV)
+        Note right of PTS: No full card numbers stored, only tokens
+    end
+    
+    rect rgba(230, 245, 255, 0.5)
+        Note over Customer, PTS: 2. Payment Authorization
+        TS->>PP: Send authorization request with card details
+        Note right of PP: Data transmitted via encrypted channel
+        Note right of PP: Complies with PCI-DSS requirements
+        PP->>Bank: Process authorization request
+        Bank-->>PP: Return authorization response
+        PP-->>TS: Forward authorization status
+        TS-->>BS: Provide payment token and authorization status
+        Note left of BS: No sensitive card data, only token
+    end
+    
+    rect rgba(230, 255, 230, 0.5)
+        Note over Customer, PTS: 3. Transaction Processing
+        BS->>BDB: Create transaction record with token (no card data)
+        BS->>Bank: Submit payment using token
+        Bank-->>BS: Confirm payment processed
+    end
+    
+    rect rgba(240, 230, 255, 0.5)
+        Note over Customer, PTS: 4. Post-transaction Processing
+        BS->>IG: Request invoice generation
+        IG->>BDB: Store invoice reference
+        BS->>PS: Request subscription activation
+        PS->>Customer: Send subscription activation confirmation
+        IG->>Customer: Send invoice (email or portal)
+    end
+    
+    rect rgba(240, 240, 240, 0.5)
+        Note over Customer, PTS: Security Measures Throughout Process
+        Note over WP, CA: All data in transit encrypted with TLS/SSL
+        Note over TS, PTS: Payment data immediately tokenized in secure zone
+        Note over PP, Bank: External transfers comply with PCI-DSS
+        Note over BDB: Transaction records contain tokens, not card numbers
+        Note over CDB, BDB: Access controls limit personnel access to data
+    end
 ```
 
 ## Legend
@@ -93,3 +162,14 @@ This detailed transaction flow diagram illustrates:
 - Special security controls are applied to systems handling payment data
 - Customer data and payment data are stored in separate systems
 - Encryption is applied to all data in transit
+
+## Transaction Security Details
+
+The transaction processing system incorporates multiple layers of protection:
+
+1. **Immediate Tokenization**: Card details are tokenized as soon as possible after collection
+2. **Secure Processing Environment**: Payment data is processed in a dedicated secure zone
+3. **Minimal Data Sharing**: External parties only receive the data necessary for their function
+4. **PCI-DSS Compliance**: Payment processing adheres to industry security standards
+5. **Access Controls**: Only authorized personnel can access transaction data
+6. **Audit Logging**: All access to payment systems is logged for security monitoring

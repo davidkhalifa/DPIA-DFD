@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - Detailed Transaction Processing
-</title>
+    <title>Commerce Financial Platforms (CFP) - Detailed Transaction Processing</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -15,8 +14,7 @@
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>
-    <style>
+    </script>    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -52,6 +50,16 @@
             text-align: center;
             margin: 30px 0;
             padding: 15px 0;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
         }
         ul, ol {
             padding-left: 25px;
@@ -106,15 +114,13 @@
 <body>
     <div class="container">
         <div class="menu">
-            <a href="index.html">Home</a>
             <a href="high_level_overview.html">High Level Overview</a>
             <a href="data_retention_deletion.html">Data Retention & Deletion</a>
             <a href="external_data_sharing.html">External Data Sharing</a>
             <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="user_journey_perspective.html">User Journey </a>
+            <a href="index.html">Home</a>
         </div>
-<h1>Commerce Financial Platforms (CFP) - Detailed Transaction Processing
-</h1>
+<h1>Commerce Financial Platforms (CFP) - Detailed Transaction Processing</h1>
 
 <p>This diagram provides a detailed view of the transaction processing flow in Microsoft's Commerce Financial Platforms (CFP), focusing on how customer payment data is handled.</p>
 
@@ -140,9 +146,9 @@
     ProvisioningService["Service Provisioning System"]:::process
     
     %% Data stores
-    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n- Billing addresses")]:::datastore
-    PaymentTokenStore[("Payment Token Store\n- Tokenized payment methods\n- No full card numbers")]:::datastore
+    CustomerDB[("Customer Info Database - Names, Contact details, Account IDs")]:::datastore
+    BillingDB[("Billing Database - Transaction records, Payment tokens, Billing addresses")]:::datastore
+    PaymentTokenStore[("Payment Token Store - Tokenized payment methods, No full card numbers")]:::datastore
     
     subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         WebPortal
@@ -160,38 +166,40 @@
             PaymentTokenStore
         end
     end
-    
-    %% Data flows - Collection Phase
-    Customer -->|"1. Profile data\n(name, email, address)\n[via TLS/SSL]"| WebPortal
-    Customer -->|"2. Payment details\n(CC#, exp date, CVV)\n[via TLS/SSL]"| WebPortal:::sensitiveData
-    WebPortal -->|"3. Profile data"| CommerceAPI
-    CommerceAPI -->|"4. Store customer data"| CustomerDB
-    WebPortal -->|"5. Payment details\n(sensitive, temporary)"| TokenizationService:::sensitiveData
-    
-    %% Data flows - Processing Phase  
-    TokenizationService -->|"6. Tokenized payment\n(token only, no CVV)"| PaymentTokenStore
-    TokenizationService -->|"7. Payment authorization request\n(with card details)\n[encrypted]"| PaymentProcessor
-    PaymentProcessor -->|"8. Authorization\nresponse"| TokenizationService
-    TokenizationService -->|"9. Payment token\n+ authorization status"| BillingService
-    BillingService -->|"10. Create billing record\nwith customer ID & token"| BillingDB
-    BillingService -->|"11. Request payment\nusing token"| Bank
-    Bank -->|"12. Payment\nconfirmation"| BillingService
-    
-    %% Data flows - Post-Processing Phase
-    BillingService -->|"13. Transaction\ndetails"| InvoiceGenerator
-    InvoiceGenerator -->|"14. Invoice\nID link"| BillingDB
-    BillingService -->|"15. Activate subscription\n(customer ID)"| ProvisioningService
-    ProvisioningService -->|"16. Subscription active\nconfirmation"| Customer
-    InvoiceGenerator -->|"17. Invoice\n(name, address, purchase details)"| Customer
+      %% Data flows - Collection Phase
+    Customer -->|"Profile data (name, email, address) via TLS/SSL"| WebPortal
+    Customer -->|"Payment details (CC#, exp date, CVV) via TLS/SSL"| WebPortal:::sensitiveData
+    WebPortal -->|"Profile data"| CommerceAPI
+    CommerceAPI -->|"Store customer data"| CustomerDB
+    WebPortal -->|"Payment details (sensitive, temporary)"| TokenizationService:::sensitiveData
+      %% Data flows - Processing Phase  
+    TokenizationService -->|"Tokenized payment (token only, no CVV)"| PaymentTokenStore
+    TokenizationService -->|"Payment authorization request (with card details) encrypted"| PaymentProcessor
+    PaymentProcessor -->|"Authorization response"| TokenizationService
+    TokenizationService -->|"Payment token + authorization status"| BillingService
+    BillingService -->|"Create billing record with customer ID & token"| BillingDB
+    BillingService -->|"Request payment using token"| Bank
+    Bank -->|"Payment confirmation"| BillingService
+      %% Data flows - Post-Processing Phase
+    BillingService -->|"Transaction details"| InvoiceGenerator
+    InvoiceGenerator -->|"Invoice ID link"| BillingDB
+    BillingService -->|"Activate subscription (customer ID)"| ProvisioningService
+    ProvisioningService -->|"Subscription active confirmation"| Customer
+    InvoiceGenerator -->|"Invoice (name, address, purchase details)"| Customer
     
     %% Indicators for PII handling
-    WebPortal -.->|"PII collected here\nis encrypted in transit"| WebPortal
-    TokenizationService -.->|"Card data tokenized immediately\nCVV never stored"| TokenizationService
-    PaymentTokenStore -.->|"Tokens stored with\nenhanced security controls"| PaymentTokenStore
-    BillingDB -.->|"Contains customer ID\nbut no raw payment data"| BillingDB</div>
+    WebPortal -.->|"PII collected here is encrypted in transit"| WebPortal
+    TokenizationService -.->|"Card data tokenized immediately, CVV never stored"| TokenizationService
+    PaymentTokenStore -.->|"Tokens stored with enhanced security controls"| PaymentTokenStore
+    BillingDB -.->|"Contains customer ID but no raw payment data"| BillingDB</div>
 
-<p>#<h1>Legend
-</h1></p>
+<p>#<h1>Detailed Transaction Sequence</h1></p>
+
+<p>The following sequence diagram shows the detailed step-by-step process of a customer transaction, highlighting the security measures in place for handling sensitive payment information.</p>
+
+<div class='svg-container'><img src='../svg_exports/sequence/transaction_processing_detail_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
+
+<p>#<h1>Legend</h1></p>
 
 <p>This detailed transaction flow diagram illustrates:</p>
 
@@ -201,20 +209,24 @@
 4. <strong>Data Minimization</strong>: Each system only accesses the personal data it needs
 5. <strong>Encryption</strong>: All external transfers are encrypted using TLS/SSL</p>
 
-<p>#<h1>Key Data Protection Elements:
-</h1></p>
+<p>#<h1>Key Data Protection Elements:</h1></p>
 
-<ul><li>CVV data is never stored and is used only for initial authorization
-</li>
-<li>Full credit card numbers are replaced with tokens for recurring billing
-</li>
-<li>Special security controls are applied to systems handling payment data
-</li>
-<li>Customer data and payment data are stored in separate systems
-</li>
-<li>Encryption is applied to all data in transit
-</li>
-</ul>
+<ul><li>CVV data is never stored and is used only for initial authorization</li>
+<li>Full credit card numbers are replaced with tokens for recurring billing</li>
+<li>Special security controls are applied to systems handling payment data</li>
+<li>Customer data and payment data are stored in separate systems</li>
+<li>Encryption is applied to all data in transit</li>
+
+<p></ul>#<h1>Transaction Security Details</h1></p>
+
+<p>The transaction processing system incorporates multiple layers of protection:</p>
+
+<p>1. <strong>Immediate Tokenization</strong>: Card details are tokenized as soon as possible after collection
+2. <strong>Secure Processing Environment</strong>: Payment data is processed in a dedicated secure zone
+3. <strong>Minimal Data Sharing</strong>: External parties only receive the data necessary for their function
+4. <strong>PCI-DSS Compliance</strong>: Payment processing adheres to industry security standards
+5. <strong>Access Controls</strong>: Only authorized personnel can access transaction data
+6. <strong>Audit Logging</strong>: All access to payment systems is logged for security monitoring</p>
     </div>
 </body>
 </html>

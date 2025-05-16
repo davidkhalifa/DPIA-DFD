@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow
-</title>
+    <title>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -15,8 +14,7 @@
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>
-    <style>
+    </script>    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -52,6 +50,16 @@
             text-align: center;
             margin: 30px 0;
             padding: 15px 0;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
         }
         ul, ol {
             padding-left: 25px;
@@ -106,15 +114,13 @@
 <body>
     <div class="container">
         <div class="menu">
-            <a href="index.html">Home</a>
             <a href="high_level_overview.html">High Level Overview</a>
             <a href="data_retention_deletion.html">Data Retention & Deletion</a>
             <a href="external_data_sharing.html">External Data Sharing</a>
             <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="user_journey_perspective.html">User Journey </a>
+            <a href="index.html">Home</a>
         </div>
-<h1>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow
-</h1>
+<h1>Commerce Financial Platforms (CFP) - Data Retention & Deletion Flow</h1>
 
 <p>This diagram shows the lifecycle, retention, and deletion processes for personal data in Microsoft's Commerce Financial Platforms (CFP).</p>
 
@@ -138,12 +144,12 @@
     DeleteProcess["Deletion Process"]:::deletion
     
     %% Data stores
-    CustomerDB[("Customer Info Database\n- Names, Contact details\n- Account IDs\n[Retention: Active + 2 years]")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens\n[Retention: 3 years]")]:::datastore
-    FinanceDataLake[("Finance Data Lake\n- Transaction records (with IDs)\n- Usage data (pseudonymized)\n[Retention: 7 years]")]:::datastore
-    GeneralLedger[("General Ledger System\n- Aggregated financial data\n- Limited personal data\n[Retention: 10 years]")]:::datastore
-    ArchiveStorage[("Archived Records\n- Legal compliance data\n- Pseudonymized\n[Retention: 7-10 years]")]:::datastore
-    AnonymousAnalytics[("Anonymous Analytics\n- Statistical usage data\n- No personal identifiers\n[Retention: Indefinite]")]:::anonymized
+    CustomerDB[("Customer Info Database - Names, Contact details, Account IDs [Retention: Active + 2 years]")]:::datastore
+    BillingDB[("Billing Database - Transaction records, Payment tokens [Retention: 3 years]")]:::datastore
+    FinanceDataLake[("Finance Data Lake - Transaction records (with IDs), Usage data (pseudonymized) [Retention: 7 years]")]:::datastore
+    GeneralLedger[("General Ledger System - Aggregated financial data, Limited personal data [Retention: 10 years]")]:::datastore
+    ArchiveStorage[("Archived Records - Legal compliance data, Pseudonymized [Retention: 7-10 years]")]:::datastore
+    AnonymousAnalytics[("Anonymous Analytics - Statistical usage data, No personal identifiers [Retention: Indefinite]")]:::anonymized
     
     subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         DataCollection
@@ -165,44 +171,45 @@
             AnonymousAnalytics
         end
     end
-    
-    %% Data flows - Collection and Active Use
-    Customer -->|"Personal & payment data\nfor purchases"| DataCollection
-    DataCollection -->|"Customer profile\ndata"| CustomerDB
-    DataCollection -->|"Transaction\ndata"| BillingDB
-    CustomerDB <-->|"Customer data\nfor processing"| ActiveDataHandling
-    BillingDB <-->|"Transaction data\nfor processing"| ActiveDataHandling
+      %% Data flows - Collection and Active Use
+    Customer -->|"Personal & payment data for purchases"| DataCollection
+    DataCollection -->|"Customer profile data"| CustomerDB
+    DataCollection -->|"Transaction data"| BillingDB
+    CustomerDB <-->|"Customer data for processing"| ActiveDataHandling
+    BillingDB <-->|"Transaction data for processing"| ActiveDataHandling
     ActiveDataHandling -->|"Financial records"| FinanceDataLake
-    FinanceDataLake -->|"Aggregated\nfinancial data"| GeneralLedger
-    
-    %% Data flows - Retention & Archiving
-    DataRetentionProcess -->|"Monitor retention\nperiods"| CustomerDB
-    DataRetentionProcess -->|"Monitor retention\nperiods"| BillingDB
-    DataRetentionProcess -->|"Monitor retention\nperiods"| FinanceDataLake
-    DataRetentionProcess -->|"Monitor retention\nperiods"| GeneralLedger
-    CustomerDB -->|"Archive relevant\nlegal data"| ArchiveStorage
-    BillingDB -->|"Archive financial\nrecords"| ArchiveStorage
-    FinanceDataLake -->|"Pseudonymize &\naggregate"| AnonymousAnalytics
-    
-    %% Data flows - Deletion Requests
-    Customer -->|"Data deletion\nrequest"| PrivacyPortal
-    PrivacyPortal -->|"Process deletion\nrequests"| DeleteProcess
-    DeleteProcess -->|"Delete personal data\n(where legally permitted)"| CustomerDB
-    DeleteProcess -->|"Delete personal data\n(where legally permitted)"| BillingDB
-    DeleteProcess -->|"Pseudonymize data\n(retained for legal reasons)"| FinanceDataLake
-    DeleteProcess -.->|"Cannot delete legally\nrequired records"| ArchiveStorage
-    DeleteProcess -.->|"No action needed\n(already anonymous)"| AnonymousAnalytics
-    
-    %% Annotations for retention processes
-    CustomerDB -.->|"Data deleted 2 years\nafter account closure"| CustomerDB
-    BillingDB -.->|"Transaction data kept\n3 years for support"| BillingDB
-    FinanceDataLake -.->|"Financial records kept\n7 years for tax purposes"| FinanceDataLake
-    GeneralLedger -.->|"Ledger data kept\n10 years for auditing"| GeneralLedger
-    ArchiveStorage -.->|"Archived with minimal\npersonal data"| ArchiveStorage
-    AnonymousAnalytics -.->|"No identifiable\npersonal data"| AnonymousAnalytics</div>
+    FinanceDataLake -->|"Aggregated financial data"| GeneralLedger
+      %% Data flows - Retention & Archiving
+    DataRetentionProcess -->|"Monitor retention periods"| CustomerDB
+    DataRetentionProcess -->|"Monitor retention periods"| BillingDB
+    DataRetentionProcess -->|"Monitor retention periods"| FinanceDataLake
+    DataRetentionProcess -->|"Monitor retention periods"| GeneralLedger
+    CustomerDB -->|"Archive relevant legal data"| ArchiveStorage
+    BillingDB -->|"Archive financial records"| ArchiveStorage
+    FinanceDataLake -->|"Pseudonymize & aggregate"| AnonymousAnalytics
+      %% Data flows - Deletion Requests
+    Customer -->|"Data deletion request"| PrivacyPortal
+    PrivacyPortal -->|"Process deletion requests"| DeleteProcess
+    DeleteProcess -->|"Delete personal data (where legally permitted)"| CustomerDB
+    DeleteProcess -->|"Delete personal data (where legally permitted)"| BillingDB
+    DeleteProcess -->|"Pseudonymize data (retained for legal reasons)"| FinanceDataLake
+    DeleteProcess -.->|"Cannot delete legally required records"| ArchiveStorage
+    DeleteProcess -.->|"No action needed (already anonymous)"| AnonymousAnalytics
+      %% Annotations for retention processes
+    CustomerDB -.->|"Data deleted 2 years after account closure"| CustomerDB
+    BillingDB -.->|"Transaction data kept 3 years for support"| BillingDB
+    FinanceDataLake -.->|"Financial records kept 7 years for tax purposes"| FinanceDataLake
+    GeneralLedger -.->|"Ledger data kept 10 years for auditing"| GeneralLedger
+    ArchiveStorage -.->|"Archived with minimal personal data"| ArchiveStorage
+    AnonymousAnalytics -.->|"No identifiable personal data"| AnonymousAnalytics</div>
 
-<p>#<h1>Legend
-</h1></p>
+<p>#<h1>Data Lifecycle Sequence</h1></p>
+
+<p>This sequence diagram illustrates the temporal flow of personal data through its complete lifecycle in the Commerce Financial Platforms, from initial collection to eventual deletion or anonymization.</p>
+
+<div class='svg-container'><img src='../svg_exports/sequence/data_retention_deletion_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
+
+<p>#<h1>Legend</h1></p>
 
 <p>This data retention & deletion flow diagram illustrates:</p>
 
@@ -212,20 +219,34 @@
 4. <strong>Legal Constraints</strong>: Indicating where data must be retained for legal/tax purposes
 5. <strong>Anonymization</strong>: Showing where and how data is anonymized for long-term analytics</p>
 
-<p>#<h1>Key Data Protection Elements:
-</h1></p>
+<p>#<h1>Key Data Protection Elements:</h1></p>
 
-<ul><li>Clear retention periods defined for all personal data
-</li>
-<li>Automatic deletion triggers based on retention periods
-</li>
-<li>Process for handling customer deletion requests
-</li>
-<li>Pseudonymization and anonymization for data that must be retained
-</li>
-<li>Separation between active systems and archive/analytical systems
-</li>
-</ul>
+<ul><li>Clear retention periods defined for all personal data</li>
+<li>Automatic deletion triggers based on retention periods</li>
+<li>Process for handling customer deletion requests</li>
+<li>Pseudonymization and anonymization for data that must be retained</li>
+
+<p></ul>#<h1>Detailed Retention Policies</h1></p>
+
+<p>The Commerce Financial Platforms implements time-based retention policies:</p>
+
+<p>1. <strong>Active Customer Data</strong>: Retained while account is active plus 2 years
+2. <strong>Transaction Records</strong>: Retained for 3 years from transaction date
+3. <strong>Financial Records</strong>: Retained for 7 years to meet tax requirements
+4. <strong>Ledger Data</strong>: Retained for 10 years to meet accounting/audit requirements
+5. <strong>Archived Data</strong>: Contains minimal personal data, maintained for 7-10 years based on legal requirements
+6. <strong>Analytics Data</strong>: Fully anonymized with no personal identifiers, retained indefinitely</p>
+
+<p>#<h1>Customer Rights Implementation</h1></p>
+
+<p>When a customer exercises their deletion rights:</p>
+
+<p>1. Personal data is immediately deleted from active systems where legally permitted
+2. Data with legal retention requirements is pseudonymized to remove direct identifiers
+3. Customer receives transparent confirmation of what was deleted vs. retained
+4. Remaining pseudonymized data is deleted after legal retention periods expire
+<ul><li>Separation between active systems and archive/analytical systems</li>
+</ul></p>
     </div>
 </body>
 </html>

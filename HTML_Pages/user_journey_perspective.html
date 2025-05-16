@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - User Journey Perspective
-</title>
+    <title>Commerce Financial Platforms (CFP) - User Journey Perspective</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -15,8 +14,7 @@
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>
-    <style>
+    </script>    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -52,6 +50,16 @@
             text-align: center;
             margin: 30px 0;
             padding: 15px 0;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
         }
         ul, ol {
             padding-left: 25px;
@@ -106,15 +114,13 @@
 <body>
     <div class="container">
         <div class="menu">
-            <a href="index.html">Home</a>
             <a href="high_level_overview.html">High Level Overview</a>
             <a href="data_retention_deletion.html">Data Retention & Deletion</a>
             <a href="external_data_sharing.html">External Data Sharing</a>
             <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="user_journey_perspective.html">User Journey </a>
+            <a href="index.html">Home</a>
         </div>
-<h1>Commerce Financial Platforms (CFP) - User Journey Perspective
-</h1>
+<h1>Commerce Financial Platforms (CFP) - User Journey Perspective</h1>
 
 <p>This diagram illustrates the typical user journey and personal data flow from a customer's perspective when purchasing a Microsoft product online.</p>
 
@@ -145,10 +151,10 @@
     DataLifecycle["Data Retention & Deletion"]:::retention
     
     %% Data stores
-    CustomerDB[("Customer Database\n- Names, Contact details\n- Account IDs")]:::datastore
-    BillingDB[("Billing Database\n- Transaction records\n- Payment tokens (not full CC#)\n- Billing addresses")]:::datastore
-    FinanceDB[("Financial Records\n- Invoices, Receipts\n- Tax calculations\n- Usage data")]:::datastore
-    ServiceDB[("Service Database\n- Subscription status\n- Usage metrics")]:::datastore
+    CustomerDB[("Customer Database - Names, Contact details, Account IDs")]:::datastore
+    BillingDB[("Billing Database - Transaction records, Payment tokens (not full CC#), Billing addresses")]:::datastore
+    FinanceDB[("Financial Records - Invoices, Receipts, Tax calculations, Usage data")]:::datastore
+    ServiceDB[("Service Database - Subscription status, Usage metrics")]:::datastore
     
     subgraph MicrosoftBoundary["Microsoft Internal Systems"]
         CommerceWebsite
@@ -164,50 +170,51 @@
         FinanceDB
         ServiceDB
     end
-    
-    %% Data flows - Initial purchase
-    Customer -->|"1. Personal info\n(name, address, email)\n[via TLS/SSL]"| CommerceWebsite
-    Customer -->|"2. Credit card details\n(CC#, exp date)\n[via TLS/SSL]"| CommerceWebsite
-    CommerceWebsite -->|"3. Create customer\naccount"| AccountCreation
-    AccountCreation -->|"4. Store customer\nprofile"| CustomerDB
-    CommerceWebsite -->|"5. Process payment\n(secured/encrypted)"| PaymentProcessing
-    PaymentProcessing -->|"6. Tokenized payment\ndata (not full CC#)"| PaymentProcessor
-    PaymentProcessor -->|"7. Process payment\nwith bank"| Bank
-    Bank -->|"8. Payment\nconfirmation"| PaymentProcessor
-    PaymentProcessor -->|"9. Payment\napproval"| PaymentProcessing
-    PaymentProcessing -->|"10. Store payment\ntoken & transaction"| BillingDB
-    AccountCreation -->|"11. Customer location\nfor tax calculation"| OrderGeneration
-    OrderGeneration -->|"12. Calculate\napplicable taxes"| TaxAuthority
-    OrderGeneration -->|"13. Generate invoice\n& store record"| FinanceDB
-    OrderGeneration -->|"14. Send invoice\nto customer"| EmailService
-    EmailService -->|"15. Email invoice\nto customer"| Customer
-    
-    %% Data flows - Subsequent service usage
-    OrderGeneration -->|"16. Activate\nsubscription"| SubscriptionActivation
-    SubscriptionActivation -->|"17. Create service\nrecord"| ServiceDB
-    SubscriptionActivation -->|"18. Welcome\nemail"| EmailService
-    ServiceDB -->|"19. Track usage\n& renewal dates"| OngoingBilling
-    OngoingBilling -->|"20. Periodic billing\n(using stored token)"| PaymentProcessing
-    OngoingBilling -->|"21. Update finance\nrecords"| FinanceDB
-    
-    %% Data flows - Support and data lifecycle
-    Customer -->|"22. Billing or\naccount inquiry"| CustomerSupport
-    CustomerSupport -->|"23. Access customer\nrecords (as needed)"| CustomerDB
-    CustomerSupport -->|"24. Access billing\nrecords (as needed)"| BillingDB
-    Customer -->|"25. Request data\ndeletion"| DataLifecycle
-    DataLifecycle -->|"26. Remove personal data\n(where legally permitted)"| CustomerDB
-    DataLifecycle -->|"27. Pseudonymize data\n(for legal retention)"| BillingDB
-    DataLifecycle -->|"28. Retain financial records\n(required by law)"| FinanceDB
-    
-    %% Annotations for key data protection elements
-    CustomerDB -.->|"Secured by encryption\n& access controls"| CustomerDB
-    BillingDB -.->|"PCI compliant\nNo full CC# stored"| BillingDB
-    FinanceDB -.->|"Retained for 7+ years\nfor tax/legal purposes"| FinanceDB
-    Customer -.->|"Can access & correct\nbilling info via account"| Customer
-    DataLifecycle -.->|"Data deleted or anonymized\nafter retention period"| DataLifecycle</div>
+      %% Data flows - Initial purchase
+    Customer -->|"Personal info (name, address, email) via TLS/SSL"| CommerceWebsite
+    Customer -->|"Credit card details (CC#, exp date) via TLS/SSL"| CommerceWebsite
+    CommerceWebsite -->|"Create customer account"| AccountCreation
+    AccountCreation -->|"Store customer profile"| CustomerDB
+    CommerceWebsite -->|"Process payment (secured/encrypted)"| PaymentProcessing
+    PaymentProcessing -->|"Tokenized payment data (not full CC#)"| PaymentProcessor
+    PaymentProcessor -->|"Process payment with bank"| Bank
+    Bank -->|"Payment confirmation"| PaymentProcessor
+    PaymentProcessor -->|"Payment approval"| PaymentProcessing
+    PaymentProcessing -->|"Store payment token & transaction"| BillingDB
+    AccountCreation -->|"Customer location for tax calculation"| OrderGeneration
+    OrderGeneration -->|"Calculate applicable taxes"| TaxAuthority
+    OrderGeneration -->|"Generate invoice & store record"| FinanceDB
+    OrderGeneration -->|"Send invoice to customer"| EmailService
+    EmailService -->|"Email invoice to customer"| Customer
+      %% Data flows - Subsequent service usage
+    OrderGeneration -->|"Activate subscription"| SubscriptionActivation
+    SubscriptionActivation -->|"Create service record"| ServiceDB
+    SubscriptionActivation -->|"Welcome email"| EmailService
+    ServiceDB -->|"Track usage & renewal dates"| OngoingBilling
+    OngoingBilling -->|"Periodic billing (using stored token)"| PaymentProcessing
+    OngoingBilling -->|"Update finance records"| FinanceDB
+      %% Data flows - Support and data lifecycle
+    Customer -->|"Billing or account inquiry"| CustomerSupport
+    CustomerSupport -->|"Access customer records (as needed)"| CustomerDB
+    CustomerSupport -->|"Access billing records (as needed)"| BillingDB
+    Customer -->|"Request data deletion"| DataLifecycle
+    DataLifecycle -->|"Remove personal data (where legally permitted)"| CustomerDB
+    DataLifecycle -->|"Pseudonymize data (for legal retention)"| BillingDB
+    DataLifecycle -->|"Retain financial records (required by law)"| FinanceDB
+      %% Annotations for key data protection elements
+    CustomerDB -.->|"Secured by encryption & access controls"| CustomerDB
+    BillingDB -.->|"PCI compliant, No full CC# stored"| BillingDB
+    FinanceDB -.->|"Retained for 7+ years for tax/legal purposes"| FinanceDB
+    Customer -.->|"Can access & correct billing info via account"| Customer
+    DataLifecycle -.->|"Data deleted or anonymized after retention period"| DataLifecycle</div>
 
-<p>#<h1>Legend
-</h1></p>
+<p>#<h1>User Experience Sequence</h1></p>
+
+<p>This sequence diagram presents the chronological flow of a typical customer's experience when purchasing and using a Microsoft product, highlighting both the visible and behind-the-scenes data processing activities.</p>
+
+<div class='svg-container'><img src='../svg_exports/sequence/user_journey_perspective_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
+
+<p>#<h1>Legend</h1></p>
 
 <p>This user journey data flow diagram illustrates:</p>
 
@@ -219,24 +226,39 @@
 6. <strong>Data Sharing</strong>: When and why personal data might be shared with third parties
 7. <strong>Data Lifecycle</strong>: How personal data is managed throughout its lifecycle</p>
 
-<p>#<h1>Key Data Protection Elements:
-</h1></p>
+<p>#<h1>Customer-Centric Processing Details</h1></p>
 
-<ul><li><strong>Security Measures</strong>: All data is transmitted using TLS/SSL encryption
-</li>
-<li><strong>Payment Protection</strong>: Full credit card numbers are not stored; tokenization is used instead
-</li>
-<li><strong>Access Controls</strong>: Only authorized personnel can access personal data on a need-to-know basis
-</li>
-<li><strong>Retention Policies</strong>: Clear retention periods based on legal requirements
-</li>
-<li><strong>User Rights</strong>: Customers can access, correct, and request deletion of their data
-</li>
-<li><strong>Minimal Sharing</strong>: Personal data is only shared when necessary to complete transactions or comply with legal obligations
-</li>
+<p>From the user's perspective, personal data processing in the Commerce Financial Platforms includes:</p>
 
-<p></ul>#<h1>Plain-Language User Journey:
-</h1></p>
+<p>1. <strong>Account Creation</strong>: Customer provides information to create a profile for purchasing
+2. <strong>Payment Processing</strong>: Credit card details are securely processed and tokenized
+3. <strong>Tax Calculation</strong>: Address information determines applicable taxes
+4. <strong>Service Activation</strong>: Purchase triggers activation of the subscription
+5. <strong>Recurring Billing</strong>: Stored payment token used for subscription renewal (no re-entry of card)
+6. <strong>Customer Support</strong>: Authorized agents can access necessary account information
+7. <strong>User Control</strong>: Customer can view, update, and request deletion of personal information</p>
+
+<p>#<h1>Privacy Rights Implementation</h1></p>
+
+<p>The system supports customer privacy rights through:</p>
+
+<p>1. <strong>Transparency</strong>: Clear communication about what data is collected and how it's used
+2. <strong>Access</strong>: Customer can view their stored personal information through account settings
+3. <strong>Correction</strong>: Self-service options to update contact and billing information
+4. <strong>Deletion</strong>: Process to delete personal data with clear explanation of legal retention exceptions
+5. <strong>Security</strong>: Multi-layered protection including encryption, access controls, and tokenization
+6. <strong>Purpose Limitation</strong>: Data used only for billing, service delivery, and legal requirements</p>
+
+<p>#<h1>Key Data Protection Elements:</h1></p>
+
+<ul><li><strong>Security Measures</strong>: All data is transmitted using TLS/SSL encryption</li>
+<li><strong>Payment Protection</strong>: Full credit card numbers are not stored; tokenization is used instead</li>
+<li><strong>Access Controls</strong>: Only authorized personnel can access personal data on a need-to-know basis</li>
+<li><strong>Retention Policies</strong>: Clear retention periods based on legal requirements</li>
+<li><strong>User Rights</strong>: Customers can access, correct, and request deletion of their data</li>
+<li><strong>Minimal Sharing</strong>: Personal data is only shared when necessary to complete transactions or comply with legal obligations</li>
+
+<p></ul>#<h1>Plain-Language User Journey:</h1></p>
 
 <p>1. <strong>Providing Information</strong>: The customer provides personal details and payment information when making a purchase
 2. <strong>Account Creation</strong>: Microsoft creates a billing account for the customer

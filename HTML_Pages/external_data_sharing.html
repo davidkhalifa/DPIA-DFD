@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commerce Financial Platforms (CFP) - External Data Sharing Flow
-</title>
+    <title>Commerce Financial Platforms (CFP) - External Data Sharing Flow</title>
     <!-- Mermaid library -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>
@@ -15,8 +14,7 @@
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>
-    <style>
+    </script>    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -52,6 +50,16 @@
             text-align: center;
             margin: 30px 0;
             padding: 15px 0;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
         }
         ul, ol {
             padding-left: 25px;
@@ -106,15 +114,13 @@
 <body>
     <div class="container">
         <div class="menu">
-            <a href="index.html">Home</a>
             <a href="high_level_overview.html">High Level Overview</a>
             <a href="data_retention_deletion.html">Data Retention & Deletion</a>
             <a href="external_data_sharing.html">External Data Sharing</a>
             <a href="transaction_processing_detail.html">Transaction Processing</a>
-            <a href="user_journey_perspective.html">User Journey </a>
+            <a href="index.html">Home</a>
         </div>
-<h1>Commerce Financial Platforms (CFP) - External Data Sharing Flow
-</h1>
+<h1>Commerce Financial Platforms (CFP) - External Data Sharing Flow</h1>
 
 <p>This diagram focuses on data transfers across trust boundaries, particularly when personal data leaves Microsoft's Commerce Financial Platforms system and is shared with third parties.</p>
 
@@ -133,11 +139,11 @@
     ReportingService["Financial Reporting"]:::microsoftSystem
     
     %% Microsoft Data Stores
-    CustomerDB[("Customer Database\n(EU & US Regions)")]:::datastore
-    BillingDB[("Billing Database\n(EU & US Regions)")]:::datastore
+    CustomerDB[("Customer Database (EU & US Regions)")]:::datastore
+    BillingDB[("Billing Database (EU & US Regions)")]:::datastore
     
     %% External Third Parties
-    PaymentProcessor(["Payment Processor\n(PCI DSS Compliant)"]):::thirdPartySystem
+    PaymentProcessor(["Payment Processor (PCI DSS Compliant)"]):::thirdPartySystem
     Bank(["Customer's Bank"]):::thirdPartySystem
     TaxAuthority(["Tax Authority"]):::thirdPartySystem
     EmailProvider(["Email Service Provider"]):::thirdPartySystem
@@ -151,25 +157,23 @@
         CustomerDB
         BillingDB
     end
-    
-    %% Cross-boundary data flows
+      %% Cross-boundary data flows
     
     %% Payment processing flows
-    PaymentService -->|"1. Payment authorization request\n- Card details (tokenized)\n- Amount, currency\n[via TLS/SSL, encrypted]\n[Standard Contractual Clauses]"| PaymentProcessor:::sensitiveFlow
-    PaymentProcessor -->|"2. Authorization response\n- Approval code\n- Token reference\n[via TLS/SSL]"| PaymentService
-    PaymentProcessor -->|"3. Transaction processing\n- Payment token\n- Amount\n[via secure gateway]"| Bank:::sensitiveFlow
-    Bank -->|"4. Payment confirmation\n- Transaction ID\n- Status code\n[via secure gateway]"| PaymentProcessor
-    
-    %% Tax authority flows
-    TaxService -->|"5. Tax reporting data\n- Transaction amounts\n- Location information\n- Business category\n[via secure API, as legally required]\n[No customer identifiers]"| TaxAuthority:::legalFlow
-    TaxAuthority -->|"6. Tax calculation rules\n- Rate tables\n- Jurisdiction codes\n[via API]"| TaxService
+    PaymentService -->|"Payment authorization request: Card details (tokenized), Amount, currency [via TLS/SSL, encrypted] [Standard Contractual Clauses]"| PaymentProcessor:::sensitiveFlow
+    PaymentProcessor -->|"Authorization response: Approval code, Token reference [via TLS/SSL]"| PaymentService
+    PaymentProcessor -->|"Transaction processing: Payment token, Amount [via secure gateway]"| Bank:::sensitiveFlow
+    Bank -->|"Payment confirmation: Transaction ID, Status code [via secure gateway]"| PaymentProcessor
+      %% Tax authority flows
+    TaxService -->|"Tax reporting data: Transaction amounts, Location information, Business category [via secure API, as legally required] [No customer identifiers]"| TaxAuthority:::legalFlow
+    TaxAuthority -->|"Tax calculation rules: Rate tables, Jurisdiction codes [via API]"| TaxService
     
     %% Customer communication flows
-    BillingService -->|"7. Email content\n- Customer name, email\n- Invoice details\n[via TLS/SSL]\n[Data Processing Agreement]"| EmailProvider
-    EmailProvider -->|"8. Delivery status\n- Delivery confirmations\n- Bounce notifications\n[via API]"| BillingService
+    BillingService -->|"Email content: Customer name, email, Invoice details [via TLS/SSL] [Data Processing Agreement]"| EmailProvider
+    EmailProvider -->|"Delivery status: Delivery confirmations, Bounce notifications [via API]"| BillingService
     
     %% Audit and compliance flows
-    ReportingService -->|"9. Audit records\n- Transaction samples\n- Financial summaries\n- Limited customer data\n[via secure portal, encrypted]\n[Confidentiality Agreement]"| Auditor:::legalFlow
+    ReportingService -->|"Audit records: Transaction samples, Financial summaries, Limited customer data [via secure portal, encrypted] [Confidentiality Agreement]"| Auditor:::legalFlow
     
     %% Data source connections (internal)
     CustomerDB -->|"Customer account data"| BillingService
@@ -179,15 +183,19 @@
     BillingDB -->|"Financial data"| ReportingService
     BillingService -->|"Transaction details"| TaxService
     PaymentService -->|"Payment records"| BillingService
-    
-    %% Trust boundary annotations
-    PaymentProcessor -.->|"PCI DSS & ISO 27001\ncompliant environment"| PaymentProcessor
-    Bank -.->|"Financial institution\nsecurity controls"| Bank
-    TaxAuthority -.->|"Government security\nframework"| TaxAuthority
-    EmailProvider -.->|"ISO 27001 certified\nservice provider"| EmailProvider</div>
+      %% Trust boundary annotations
+    PaymentProcessor -.->|"PCI DSS & ISO 27001 compliant environment"| PaymentProcessor
+    Bank -.->|"Financial institution security controls"| Bank
+    TaxAuthority -.->|"Government security framework"| TaxAuthority
+    EmailProvider -.->|"ISO 27001 certified service provider"| EmailProvider</div>
 
-<p>#<h1>Legend
-</h1></p>
+<p>#<h1>Cross-Boundary Data Transfer Sequence</h1></p>
+
+<p>This sequence diagram illustrates the chronological flow of personal data across trust boundaries, highlighting the specific security and contractual safeguards in place.</p>
+
+<div class='svg-container'><img src='../svg_exports/sequence/external_data_sharing_2.svg' alt='Sequence Diagram' class='svg-diagram'></div>
+
+<p>#<h1>Legend</h1></p>
 
 <p>This external data sharing flow diagram illustrates:</p>
 
@@ -197,22 +205,25 @@
 4. <strong>Security Measures</strong>: Encryption, secure protocols, and authentication methods
 5. <strong>Contractual Safeguards</strong>: References to data protection agreements in place</p>
 
-<p>#<h1>Key Data Protection Elements:
-</h1></p>
+<p>#<h1>Key Data Protection Elements:</h1></p>
 
-<ul><li>Standard Contractual Clauses (SCCs) govern data transfers to payment processors
-</li>
-<li>Data Processing Agreements are in place with service providers like email delivery services
-</li>
-<li>Only necessary data crosses trust boundaries (data minimization principle)
-</li>
-<li>Sensitive payment data is tokenized before sharing with third parties
-</li>
-<li>Tax reporting data excludes direct customer identifiers where possible
-</li>
-<li>All cross-boundary transfers use encryption and secure protocols
-</li>
-</ul>
+<ul><li>Standard Contractual Clauses (SCCs) govern data transfers to payment processors</li>
+<li>Data Processing Agreements are in place with service providers like email delivery services</li>
+<li>Only necessary data crosses trust boundaries (data minimization principle)</li>
+<li>Sensitive payment data is tokenized before sharing with third parties</li>
+<li>Tax reporting data excludes direct customer identifiers where possible</li>
+<li>All cross-boundary transfers use encryption and secure protocols</li>
+
+<p></ul>#<h1>Third-Party Sharing Controls</h1></p>
+
+<p>Microsoft's Commerce Financial Platform implements strict controls for sharing personal data:</p>
+
+<p>1. <strong>Legal Basis</strong>: Each external data transfer has a specific legal basis (contract performance, legal obligation, or legitimate interest)
+2. <strong>Purpose Limitation</strong>: Data is shared only for specified, explicit purposes
+3. <strong>Contractual Protection</strong>: Formal agreements (SCCs, DPAs) establish recipient obligations
+4. <strong>Data Minimization</strong>: Only necessary data elements are shared, with minimized identifiers
+5. <strong>Technical Safeguards</strong>: Encryption, secure transfer protocols, and access controls protect data in transit
+6. <strong>Compliance Verification</strong>: Third-party security certifications (PCI-DSS, ISO 27001) and audits verify recipient safeguards</p>
     </div>
 </body>
 </html>

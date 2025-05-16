@@ -8,7 +8,7 @@ if (-not (Test-Path -Path $htmlDir)) {
 }
 
 # Get all markdown files
-$markdownFiles = Get-ChildItem -Path "C:\DPIA DFD" -Filter "*.md" | Where-Object { $_.Name -ne "README.md" }
+$markdownFiles = Get-ChildItem -Path "C:\DPIA DFD\generated md files" -Filter "*.md" | Where-Object { $_.Name -ne "README.md" }
 
 foreach ($mdFile in $markdownFiles) {
     Write-Host "Processing $($mdFile.Name)..."
@@ -41,8 +41,7 @@ foreach ($mdFile in $markdownFiles) {
                 fontFamily: 'Segoe UI'
             });
         });
-    </script>
-    <style>
+    </script>    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -78,6 +77,16 @@ foreach ($mdFile in $markdownFiles) {
             text-align: center;
             margin: 30px 0;
             padding: 15px 0;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px 0;
+        }
+        .svg-diagram {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
         }
         ul, ol {
             padding-left: 25px;
@@ -139,11 +148,33 @@ foreach ($mdFile in $markdownFiles) {
             <a href="index.html">Home</a>
         </div>
 
-"@
-
-    # Extract Mermaid code blocks
+"@    # Extract Mermaid code blocks
     $mermaidPattern = '```mermaid([\s\S]*?)```'
     $mermaidBlocks = [regex]::Matches($markdownContent, $mermaidPattern)
+    
+    # Create arrays to track different diagram types
+    $dfdBlocks = @()
+    $sequenceBlocks = @()
+    
+    # Separate mermaid blocks into DFD and sequence diagrams
+    for ($i = 0; $i -lt $mermaidBlocks.Count; $i++) {
+        $mermaidContent = $mermaidBlocks[$i].Groups[1].Value.Trim()
+        if ($mermaidContent -match "sequenceDiagram") {
+            # This is a sequence diagram
+            $sequenceBlocks += @{
+                Index = $i
+                Content = $mermaidContent
+                OriginalBlock = $mermaidBlocks[$i].Value
+            }
+        } else {
+            # This is a DFD diagram (flowchart)
+            $dfdBlocks += @{
+                Index = $i
+                Content = $mermaidContent
+                OriginalBlock = $mermaidBlocks[$i].Value
+            }
+        }
+    }
     
     # Replace Mermaid blocks with placeholders
     $contentWithPlaceholders = $markdownContent
@@ -178,10 +209,30 @@ foreach ($mdFile in $markdownFiles) {
     
     $contentWithPlaceholders = $processedLines -join "`n`n"
     
-    # Restore Mermaid blocks
+    # Restore Mermaid blocks - DFD diagrams using Mermaid, sequence diagrams using direct SVG references
     for ($i = 0; $i -lt $mermaidBlocks.Count; $i++) {
-        $mermaidContent = $mermaidBlocks[$i].Groups[1].Value.Trim()
-        $contentWithPlaceholders = $contentWithPlaceholders.Replace("MERMAID_PLACEHOLDER_$i", "<div class='mermaid'>$mermaidContent</div>")
+        $baseName = $mdFile.BaseName
+        
+        # Determine if this is a DFD or sequence diagram
+        $isDFD = $true
+        foreach ($seq in $sequenceBlocks) {
+            if ($seq.Index -eq $i) {
+                $isDFD = $false
+                break
+            }
+        }
+        
+        if ($isDFD) {
+            # This is a DFD diagram - use Mermaid renderer
+            $mermaidContent = $mermaidBlocks[$i].Groups[1].Value.Trim()
+            $contentWithPlaceholders = $contentWithPlaceholders.Replace("MERMAID_PLACEHOLDER_$i", "<div class='mermaid'>$mermaidContent</div>")
+        } else {
+            # This is a sequence diagram - reference SVG file directly
+            # The file naming pattern follows basename_X.svg where X is the diagram index (1-based for DFDs, 2-based for sequence)
+            $svgFileName = "$baseName" + "_2.svg"
+            $svgPath = "../svg_exports/sequence/$svgFileName"
+            $contentWithPlaceholders = $contentWithPlaceholders.Replace("MERMAID_PLACEHOLDER_$i", "<div class='svg-container'><img src='$svgPath' alt='Sequence Diagram' class='svg-diagram'></div>")
+        }
     }
     
     # Add the processed content to the HTML
